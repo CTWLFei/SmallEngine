@@ -13,5 +13,146 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="头文件\se_game">
+      <UniqueIdentifier>{48125be6-99c4-4a1f-af3c-8181e1ebb36f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\se_game">
+      <UniqueIdentifier>{a7f27f42-2392-428b-90b3-4e74a640a7f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\se_aux">
+      <UniqueIdentifier>{17ffd3d7-5506-48c0-9059-414c6f0db31e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\se_core">
+      <UniqueIdentifier>{54962c40-8948-4bf8-a0ba-aced78e2e020}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\se_core">
+      <UniqueIdentifier>{aa590b16-04c5-4e29-b38f-be40cf71bf8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\se_aux">
+      <UniqueIdentifier>{5d4d3863-6d51-49dc-9065-f8de7dacf8e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="资源文件\shader">
+      <UniqueIdentifier>{40d8fe95-37d3-4a97-85a4-abf754dbbf4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\se_core\se_gl_component">
+      <UniqueIdentifier>{77146574-2e6c-41a7-9722-fc7042089e21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\se_core\se_graph">
+      <UniqueIdentifier>{aa95d6b9-455d-4d0b-8e6a-1d1822a72e30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\se_core\se_camera">
+      <UniqueIdentifier>{3969a7db-885a-49dd-8104-2a02608e2417}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\se_core\se_camera">
+      <UniqueIdentifier>{9074dabb-91d1-426f-b47e-5e1a3f55cdf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\se_core\se_gl_component">
+      <UniqueIdentifier>{2a7e4a10-424d-46e1-9af1-5ffc2daedaf6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\se_core\se_graph">
+      <UniqueIdentifier>{c560b880-578f-4f36-a88d-4694d090de6d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="include\GLAD\glad.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\se_game\GameLogicDummy.cpp">
+      <Filter>源文件\se_game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\se_game\GameEngine.cpp">
+      <Filter>源文件\se_game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\se_aux\Window.cpp">
+      <Filter>源文件\se_aux</Filter>
+    </ClCompile>
+    <ClCompile Include="src\se_core\se_graph\Mesh.cpp">
+      <Filter>源文件\se_core\se_graph</Filter>
+    </ClCompile>
+    <ClCompile Include="src\se_core\se_camera\Camera.cpp">
+      <Filter>源文件\se_core\se_camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\se_core\Renderer.cpp">
+      <Filter>源文件\se_core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\se_aux\Utils.cpp">
+      <Filter>源文件\se_aux</Filter>
+    </ClCompile>
+    <ClCompile Include="src\se_core\se_gl_component\ShaderProgram.cpp">
+      <Filter>源文件\se_core\se_gl_component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\se_core\se_gl_component\Texture.cpp">
+      <Filter>源文件\se_core\se_gl_component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\se_core\Transform.cpp">
+      <Filter>源文件\se_core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\se_game\GameItem.cpp">
+      <Filter>源文件\se_game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\se_core\MouseInput.cpp">
+      <Filter>源文件\se_core</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\se_game\GameLogic.h">
+      <Filter>头文件\se_game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_game\GameLogicDummy.h">
+      <Filter>头文件\se_game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_aux\Timer.h">
+      <Filter>头文件\se_aux</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_aux\Window.h">
+      <Filter>头文件\se_aux</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_core\Renderer.h">
+      <Filter>头文件\se_core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_game\GameEngine.h">
+      <Filter>头文件\se_game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_aux\Utils.h">
+      <Filter>头文件\se_aux</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_core\se_camera\Camera.h">
+      <Filter>头文件\se_core\se_camera</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_core\se_graph\Mesh.h">
+      <Filter>头文件\se_core\se_graph</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_core\se_gl_component\ShaderProgram.h">
+      <Filter>头文件\se_core\se_gl_component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_core\se_gl_component\Texture.h">
+      <Filter>头文件\se_core\se_gl_component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_aux\GLCommon.h">
+      <Filter>头文件\se_aux</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_aux\Logger.h">
+      <Filter>头文件\se_aux</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_core\Transform.h">
+      <Filter>头文件\se_core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_game\GameItem.h">
+      <Filter>头文件\se_game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_core\MouseInput.h">
+      <Filter>头文件\se_core</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shader\test.fs">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="shader\test.vs">
+      <Filter>资源文件\shader</Filter>
+    </None>
   </ItemGroup>
 </Project>
