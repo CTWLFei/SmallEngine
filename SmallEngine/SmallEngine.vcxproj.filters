@@ -52,6 +52,12 @@
     <Filter Include="源文件\se_core\se_graph">
       <UniqueIdentifier>{c560b880-578f-4f36-a88d-4694d090de6d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\se_core\se_graph\se_loader">
+      <UniqueIdentifier>{d17a9beb-ac36-4bb0-8d6e-61a7de97262d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\se_core\se_graph\se_loader">
+      <UniqueIdentifier>{35d8e7f0-cb59-4d5d-bdef-46b243e667e3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -95,6 +101,9 @@
     </ClCompile>
     <ClCompile Include="src\se_core\MouseInput.cpp">
       <Filter>源文件\se_core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\se_core\se_graph\se_loader\OBJLoader.cpp">
+      <Filter>源文件\se_core\se_graph\se_loader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +154,9 @@
     </ClInclude>
     <ClInclude Include="include\se_core\MouseInput.h">
       <Filter>头文件\se_core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_core\se_graph\se_loader\OBJLoader.h">
+      <Filter>头文件\se_core\se_graph\se_loader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
