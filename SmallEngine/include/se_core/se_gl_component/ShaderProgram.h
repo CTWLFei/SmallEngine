@@ -5,6 +5,9 @@
 #include <fstream>
 #include <map>
 
+#include "../se_graph/se_light/PointLight.h"
+#include "../se_graph/se_material/Material.h"
+
 class ShaderProgram
 {
 public:
@@ -13,10 +16,14 @@ public:
 	void bind();
 	void unbind();
 	void cleanup();
-	void createUniform(std::string uniformName) {}
+	void createUniform(std::string uniformName);
+	void createPointLightUniform(std::string uniformName);
+	void createMaterialUniform(std::string uniformName);
 	void setFloatUniform(const char* name, float* values, int vec_size, int vec_num);
 	void setMat4Uniform(const char* name, float* values, int size);
 	void setIntUniform(const char* name, int* values, int vec_size, int vec_num);
+	void setPointLightUniform(std::string uniformName, PointLight* pointLight);
+	void setMaterialUniform(std::string uniformName, Material* material);
 	void setTextureUniform(GLint texture_id, const char* name, GLenum texture_target);
 	int getProgram();
 	virtual ~ShaderProgram();

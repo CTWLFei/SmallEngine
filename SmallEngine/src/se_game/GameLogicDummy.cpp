@@ -1,5 +1,7 @@
 #include <se_game/GameLogicDummy.h>
 #include <se_core/se_graph/se_loader/OBJLoader.h>
+#include <se_core/se_graph/se_material/Material.h>
+#include <se_core/se_graph/se_light/PointLight.h>
 
 float GameLogicDummy::MOUSE_SENSITIVITY = 0.2f;
 float GameLogicDummy::CAMERA_POS_STEP = 0.05f;
@@ -15,14 +17,24 @@ GameLogicDummy::~GameLogicDummy()
 void GameLogicDummy::init(Window* window)
 {
 	renderer->init(window);
+	float reflectant = 1.0;
 	Mesh* mesh = OBJLoader::loadMesh("./models/bunny.obj");
 	Texture* texture = new Texture("./textures/grassblock.png");
-	mesh->setTexture(texture);
+	Material* material = new Material(texture, reflectant);
+	mesh->setMaterial(material);
 	GameItem* gameItem = new GameItem(mesh);
 	gameItem->setScale(0.5f);
 	gameItem->setPosition(0, 0, -2);
 
 	gameItems.push_back(gameItem);
+
+	ambientLight = vec3(0.3f, 0.3f, 0.3f);
+	vec3 lightColour = vec3(1, 1, 1);
+	vec3 lightPosition = vec3(0, 0, 1);
+	float lightIntensity = 1.0f;
+	pointLight = new PointLight(lightColour, lightPosition, lightIntensity);
+	Attenuation* att = new Attenuation(0.0f, 0.0f, 1.0f);
+	pointLight->setAttenuation(att);
 }
 
 void GameLogicDummy::input(Window* window, MouseInput* mouseInput)
@@ -62,7 +74,8 @@ void GameLogicDummy::update(float interval, MouseInput* mouseInput)
 
 void GameLogicDummy::render(Window* window)
 {
-	renderer->render(window, camera, gameItems);
+	//renderer->render(window, camera, gameItems);
+	renderer->render(window, camera, gameItems, ambientLight, pointLight);
 }
 
 void GameLogicDummy::cleanup()

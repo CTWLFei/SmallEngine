@@ -22,7 +22,8 @@ private:
 	Renderer* renderer;
 	Camera* camera;
 	vector<GameItem*> gameItems;
-
+	vec3 ambientLight;
+	PointLight* pointLight;
 	
 };
 

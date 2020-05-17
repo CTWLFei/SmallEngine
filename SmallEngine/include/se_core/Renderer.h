@@ -11,6 +11,7 @@ public:
 	void init(Window* window);
 	void clear();
 	void render(Window* window, Camera* camera, vector<GameItem*>& gameItems);
+	void render(Window* window, Camera* camera, vector<GameItem*>& gameItems, vec3 ambientLight, PointLight* pointLight);
 	void cleanup();
 private:
 	static float fov;
@@ -18,5 +19,6 @@ private:
 	static float zFar;
 	Transform* transformation;
 	ShaderProgram* shaderProgram;
+	float specularPower;
 };
 #endif

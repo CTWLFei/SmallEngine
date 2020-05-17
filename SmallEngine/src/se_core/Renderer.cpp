@@ -6,6 +6,7 @@ float Renderer::zFar = 1000.0;
 Renderer::Renderer()
 {
 	transformation = new Transform();
+	specularPower = 10.0;
 }
 Renderer::~Renderer()
 {
@@ -20,6 +21,12 @@ void Renderer::init(Window* window)
 	shaderProgram->createUniform("projectionMatrix");
 	shaderProgram->createUniform("modelViewMatrix");
 	shaderProgram->createUniform("texture_sampler");
+	// Create uniform for material
+	shaderProgram->createMaterialUniform("material");
+	// Create lighting related uniforms
+	shaderProgram->createUniform("specularPower");
+	shaderProgram->createUniform("ambientLight");
+	shaderProgram->createPointLightUniform("pointLight");
 }
 void Renderer::clear()
 {
@@ -43,7 +50,7 @@ void Renderer::render(Window* window, Camera* camera, vector<GameItem*>& gameIte
 	// Update view Matrix
 	mat4 viewMatrix = transformation->getViewMatrix(*camera);
 
-	shaderProgram->setTextureUniform(gameItems[0]->getMesh()->getTextureId(), "texture_sampler", GL_TEXTURE_2D);
+	shaderProgram->setTextureUniform(gameItems[0]->getMesh()->getMaterial()->getTexture()->id(), "texture_sampler", GL_TEXTURE_2D);
 	// Render each gameItem
 	for (GameItem* gameItem : gameItems) {
 		// Set model view matrix for this item
@@ -59,6 +66,50 @@ void Renderer::render(Window* window, Camera* camera, vector<GameItem*>& gameIte
 
 	shaderProgram->unbind();
 }
+
+void Renderer::render(Window* window, Camera* camera, vector<GameItem*>& gameItems, vec3 ambientLight, PointLight* pointLight)
+{
+	clear();
+
+	if (window->isResized()) {
+		glViewport(0, 0, window->getWidth(), window->getHeight());
+		window->setResized(false);
+	}
+
+	shaderProgram->bind();
+
+	mat4 projectionMatrix = transformation->getProjectionMatrix(fov, window->getWidth(), window->getHeight(), zNear, zFar);
+	shaderProgram->setMat4Uniform("projectionMatrix", projectionMatrix, 1);
+
+	// Update view Matrix
+	mat4 viewMatrix = transformation->getViewMatrix(*camera);
+
+	// Update Light Uniforms
+	shaderProgram->setFloatUniform("ambientLight", &(ambientLight[0]), 3, 1);
+	shaderProgram->setFloatUniform("specularPower", &specularPower, 1, 1);
+
+	PointLight* curPointLight = new PointLight(*pointLight);
+	vec3 lightPos = curPointLight->getPosition();
+	vec4 aux = vec4(lightPos, 1.0);
+	aux = aux * viewMatrix;
+	lightPos[0] = aux[0];
+	lightPos[1] = aux[1];
+	lightPos[2] = aux[2];
+	shaderProgram->setPointLightUniform("pointLight", curPointLight);
+	shaderProgram->setTextureUniform(0, "texture_sampler", GL_TEXTURE_2D);
+
+	// Render each gameItem
+	for (GameItem* gameItem : gameItems) {
+		Mesh* mesh = gameItem->getMesh();
+		// Set model view matrix for this item
+		mat4 modelViewMatrix = transformation->getModelViewMatrix(*gameItem, viewMatrix);
+		shaderProgram->setMat4Uniform("modelViewMatrix", modelViewMatrix, 1);
+		// Render the mes for this game item
+		shaderProgram->setMaterialUniform("material", mesh->getMaterial());
+		mesh->render();
+	}
+}
+
 void Renderer::cleanup()
 {
 	if (shaderProgram != NULL) {

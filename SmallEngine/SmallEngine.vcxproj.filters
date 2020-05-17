@@ -58,6 +58,18 @@
     <Filter Include="源文件\se_core\se_graph\se_loader">
       <UniqueIdentifier>{35d8e7f0-cb59-4d5d-bdef-46b243e667e3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\se_core\se_graph\se_light">
+      <UniqueIdentifier>{82a5343e-4fa8-4588-bb77-104eb5041e71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\se_core\se_graph\se_material">
+      <UniqueIdentifier>{5588c05c-3504-4ca7-a4e9-a2e31946a618}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\se_core\se_graph\se_light">
+      <UniqueIdentifier>{70b6dbde-8228-421d-a4f6-715c4310f8f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\se_core\se_graph\se_material">
+      <UniqueIdentifier>{420673dd-8d8a-4ba8-ad1b-6c9870977b82}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -104,6 +116,12 @@
     </ClCompile>
     <ClCompile Include="src\se_core\se_graph\se_loader\OBJLoader.cpp">
       <Filter>源文件\se_core\se_graph\se_loader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\se_core\se_graph\se_material\Material.cpp">
+      <Filter>源文件\se_core\se_graph\se_material</Filter>
+    </ClCompile>
+    <ClCompile Include="src\se_core\se_graph\se_light\PointLight.cpp">
+      <Filter>源文件\se_core\se_graph\se_light</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -157,6 +175,12 @@
     </ClInclude>
     <ClInclude Include="include\se_core\se_graph\se_loader\OBJLoader.h">
       <Filter>头文件\se_core\se_graph\se_loader</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_core\se_graph\se_light\PointLight.h">
+      <Filter>头文件\se_core\se_graph\se_light</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_core\se_graph\se_material\Material.h">
+      <Filter>头文件\se_core\se_graph\se_material</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

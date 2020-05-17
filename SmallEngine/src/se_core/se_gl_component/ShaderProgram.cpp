@@ -72,15 +72,40 @@ void ShaderProgram::cleanup()
 	}
 }
 
-void ShaderProgram::setFloatUniform(const char* name, float* values, int vec_size, int vec_num)
+void ShaderProgram::createUniform(std::string uniformName)
 {
-	int location = glGetUniformLocation(programId, name);
+	int location = glGetUniformLocation(programId, uniformName.c_str());
 	if (location < 0)
 	{
-		std::string info = "There is no uniform name " + std::string(name);
+		std::string info = "There is no uniform name " + uniformName;
 		LOGGER_ERROR(info);
 		return;
 	}
+	uniforms[uniformName] = location;
+}
+
+void ShaderProgram::createPointLightUniform(std::string uniformName)
+{
+	createUniform(uniformName + ".colour");
+	createUniform(uniformName + ".position");
+	createUniform(uniformName + ".intensity");
+	createUniform(uniformName + ".att.constant");
+	createUniform(uniformName + ".att.linear");
+	createUniform(uniformName + ".att.exponent");
+}
+void ShaderProgram::createMaterialUniform(std::string uniformName)
+{
+	createUniform(uniformName + ".ambient");
+	createUniform(uniformName + ".diffuse");
+	createUniform(uniformName + ".specular");
+	createUniform(uniformName + ".hasTexture");
+	createUniform(uniformName + ".reflectance");
+}
+
+void ShaderProgram::setFloatUniform(const char* name, float* values, int vec_size, int vec_num)
+{
+	int location = uniforms[name];
+	
 	switch (vec_size)
 	{
 	case 1:
@@ -98,29 +123,15 @@ void ShaderProgram::setFloatUniform(const char* name, float* values, int vec_siz
 	default:
 		break;
 	}
-	uniforms[name] = location;
 }
 void ShaderProgram::setMat4Uniform(const char* name, float* values, int size)
 {
-	int location = glGetUniformLocation(programId, name);
-	if (location < 0)
-	{
-		std::string info = "There is no uniform name " + std::string(name);
-		LOGGER_ERROR(info);
-		return;
-	}
+	int location = uniforms[name];
 	glUniformMatrix4fv(location, size, GL_FALSE, values);
-	uniforms[name] = location;
 }
 void ShaderProgram::setIntUniform(const char* name, int* values, int vec_size, int vec_num)
 {
-	int location = glGetUniformLocation(programId, name);
-	if (location < 0)
-	{
-		std::string info = "There is no uniform name " + std::string(name);
-		LOGGER_ERROR(info);
-		return;
-	}
+	int location = uniforms[name];
 	switch (vec_size)
 	{
 	case 1:
@@ -138,7 +149,6 @@ void ShaderProgram::setIntUniform(const char* name, int* values, int vec_size, i
 	default:
 		break;
 	}
-	uniforms[name] = location;
 }
 
 void ShaderProgram::setTextureUniform(GLint texture_id, const char* name, GLenum texture_target)
@@ -147,6 +157,30 @@ void ShaderProgram::setTextureUniform(GLint texture_id, const char* name, GLenum
 	glBindTexture(texture_target, texture_id);
 	setIntUniform(name, &texture_id, 1, 1);
 	glActiveTexture(GL_TEXTURE0);
+}
+
+void ShaderProgram::setPointLightUniform(std::string uniformName, PointLight* pointLight)
+{
+	float lightIntensity = pointLight->getIntensity();
+	float attConstant = pointLight->getAttenuation()->getConstant();
+	float attLinear = pointLight->getAttenuation()->getLinear();
+	float attExponent = pointLight->getAttenuation()->getExponent();
+	setFloatUniform((uniformName + ".colour").c_str(), &(pointLight->getColor()[0]), 3, 1);
+	setFloatUniform((uniformName + ".position").c_str(), &(pointLight->getPosition()[0]), 3, 1);
+	setFloatUniform((uniformName + ".intensity").c_str(), &lightIntensity, 1, 1);
+	setFloatUniform((uniformName + ".att.constant").c_str(), &attConstant, 1, 1);
+	setFloatUniform((uniformName + ".att.linear").c_str(), &attLinear, 1, 1);
+	setFloatUniform((uniformName + ".att.exponent").c_str(), &attExponent, 1, 1);
+}
+void ShaderProgram::setMaterialUniform(std::string uniformName, Material* material)
+{
+	float reflectance = material->getReflectance();
+	int hasTexture = material->getTexture() ? 1 : 0;
+	setFloatUniform((uniformName + ".ambient").c_str(), &(material->getAmbientColour()[0]), 4, 1);
+	setFloatUniform((uniformName + ".diffuse").c_str(), &(material->getDiffuseColour()[0]), 4, 1);
+	setFloatUniform((uniformName + ".specular").c_str(), &(material->getSpecularColour()[0]), 4, 1);
+	setIntUniform((uniformName + ".hasTexture").c_str(), &hasTexture, 1, 1);
+	setFloatUniform((uniformName + ".reflectance").c_str(), &reflectance, 1, 1);
 }
 
 int ShaderProgram::getProgram()
@@ -194,6 +228,7 @@ static std::string loadShader(const std::string& fileName)
 		}
 		return output;
 	}
+	return "";
 }
 
 static void checkShaderError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMessage)

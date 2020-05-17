@@ -2,9 +2,8 @@
 
 
 vec3 Mesh::DEFAULT_COLOUR = vec3(1.0);
-Mesh::Mesh(float* positions, int positionCount, float* textCoords, int textCoordCount, int* indices, int indexCount, Texture* texture)
+Mesh::Mesh(float* positions, int positionCount, float* textCoords, int textCoordCount, int* indices, int indexCount)
 {
-	this->texture = texture;
 	this->vertexCount = indexCount;
 
 	glGenVertexArrays(1, &vaoId);
@@ -38,7 +37,6 @@ Mesh::Mesh(float* positions, int positionCount, float* textCoords, int textCoord
 }
 Mesh::Mesh(vector<float> positions, vector<float> textCoords, vector<float> normals, vector<int> indices)
 {
-	colour = Mesh::DEFAULT_COLOUR;
 	vertexCount = indices.size();
 
 	glGenVertexArrays(1, &vaoId);
@@ -84,6 +82,7 @@ Mesh::~Mesh()
 }
 void Mesh::render()
 {
+	Texture* texture = material->getTexture();
 	// Activate firs texture bank
 	glActiveTexture(GL_TEXTURE0);
 	// Bind the texture
@@ -108,7 +107,9 @@ void Mesh::cleanup()
 	}
 
 	// Delete the texture
-	texture->cleanup();
+	Texture* texture = material->getTexture();
+	if(texture)
+		texture->cleanup();
 
 	// Delete the VAO
 	glBindVertexArray(0);

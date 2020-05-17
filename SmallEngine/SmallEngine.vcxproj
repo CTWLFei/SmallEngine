@@ -137,7 +137,9 @@
     <ClCompile Include="src\se_core\se_gl_component\ShaderProgram.cpp" />
     <ClCompile Include="src\se_core\se_gl_component\Texture.cpp" />
     <ClCompile Include="src\se_core\se_graph\Mesh.cpp" />
+    <ClCompile Include="src\se_core\se_graph\se_light\PointLight.cpp" />
     <ClCompile Include="src\se_core\se_graph\se_loader\OBJLoader.cpp" />
+    <ClCompile Include="src\se_core\se_graph\se_material\Material.cpp" />
     <ClCompile Include="src\se_core\Transform.cpp" />
     <ClCompile Include="src\se_game\GameEngine.cpp" />
     <ClCompile Include="src\se_game\GameItem.cpp" />
@@ -155,7 +157,9 @@
     <ClInclude Include="include\se_core\se_gl_component\ShaderProgram.h" />
     <ClInclude Include="include\se_core\se_gl_component\Texture.h" />
     <ClInclude Include="include\se_core\se_graph\Mesh.h" />
+    <ClInclude Include="include\se_core\se_graph\se_light\PointLight.h" />
     <ClInclude Include="include\se_core\se_graph\se_loader\OBJLoader.h" />
+    <ClInclude Include="include\se_core\se_graph\se_material\Material.h" />
     <ClInclude Include="include\se_core\Transform.h" />
     <ClInclude Include="include\se_game\GameEngine.h" />
     <ClInclude Include="include\se_game\GameItem.h" />
