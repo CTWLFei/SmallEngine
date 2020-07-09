@@ -123,15 +123,6 @@
     <ClCompile Include="src\se_core\se_graph\se_light\PointLight.cpp">
       <Filter>源文件\se_core\se_graph\se_light</Filter>
     </ClCompile>
-    <ClCompile Include="src\se_core\se_graph\se_light\DirectionalLight.cpp">
-      <Filter>源文件\se_core\se_graph\se_light</Filter>
-    </ClCompile>
-    <ClCompile Include="src\se_core\se_graph\se_light\Light.cpp">
-      <Filter>源文件\se_core\se_graph\se_light</Filter>
-    </ClCompile>
-    <ClCompile Include="src\se_core\se_graph\se_light\SpotLight.cpp">
-      <Filter>源文件\se_core\se_graph\se_light</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\se_game\GameLogic.h">

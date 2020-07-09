@@ -137,10 +137,7 @@
     <ClCompile Include="src\se_core\se_gl_component\ShaderProgram.cpp" />
     <ClCompile Include="src\se_core\se_gl_component\Texture.cpp" />
     <ClCompile Include="src\se_core\se_graph\Mesh.cpp" />
-    <ClCompile Include="src\se_core\se_graph\se_light\DirectionalLight.cpp" />
-    <ClCompile Include="src\se_core\se_graph\se_light\Light.cpp" />
     <ClCompile Include="src\se_core\se_graph\se_light\PointLight.cpp" />
-    <ClCompile Include="src\se_core\se_graph\se_light\SpotLight.cpp" />
     <ClCompile Include="src\se_core\se_graph\se_loader\OBJLoader.cpp" />
     <ClCompile Include="src\se_core\se_graph\se_material\Material.cpp" />
     <ClCompile Include="src\se_core\Transform.cpp" />
