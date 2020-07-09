@@ -93,6 +93,33 @@ void ShaderProgram::createPointLightUniform(std::string uniformName)
 	createUniform(uniformName + ".att.linear");
 	createUniform(uniformName + ".att.exponent");
 }
+
+void ShaderProgram::createPointLightUniform(std::string uniformName, int size)
+{
+	for (int pos = 0; pos < size; pos++)
+		createPointLightUniform(uniformName + "[" + std::to_string(pos) + "]");
+}
+
+void ShaderProgram::createSpotLightUniform(std::string uniformName)
+{
+	createPointLightUniform(uniformName + ".pl");
+	createUniform(uniformName + ".conedir");
+	createUniform(uniformName + ".cutoff");
+}
+void ShaderProgram::createSpotLightUniform(std::string uniformName, int size)
+{
+	for (int i = 0; i < size; i++) {
+		createSpotLightUniform(uniformName + "[" + std::to_string(i) + "]");
+	}
+}
+
+void ShaderProgram::createDirectionalLightUniform(std::string uniformName)
+{
+	createUniform(uniformName + ".colour");
+	createUniform(uniformName + ".direction");
+	createUniform(uniformName + ".intensity");
+}
+
 void ShaderProgram::createMaterialUniform(std::string uniformName)
 {
 	createUniform(uniformName + ".ambient");
@@ -100,6 +127,12 @@ void ShaderProgram::createMaterialUniform(std::string uniformName)
 	createUniform(uniformName + ".specular");
 	createUniform(uniformName + ".hasTexture");
 	createUniform(uniformName + ".reflectance");
+}
+
+void ShaderProgram::createMaterialUniform(std::string uniformName, int size)
+{
+	for (int pos = 0; pos < size; pos++)
+		createMaterialUniform(uniformName + "[" + std::to_string(pos) + "]");
 }
 
 void ShaderProgram::setFloatUniform(const char* name, float* values, int vec_size, int vec_num)
@@ -172,6 +205,35 @@ void ShaderProgram::setPointLightUniform(std::string uniformName, PointLight* po
 	setFloatUniform((uniformName + ".att.linear").c_str(), &attLinear, 1, 1);
 	setFloatUniform((uniformName + ".att.exponent").c_str(), &attExponent, 1, 1);
 }
+
+void ShaderProgram::setPointLightUniform(std::string uniformName, PointLight* pointLight, int pos)
+{
+	setPointLightUniform(uniformName + "[" + std::to_string(pos) + "]", pointLight);
+}
+
+void ShaderProgram::setSpotLightUniform(std::string uniformName, SpotLight* spotLight)
+{
+	PointLight* pointLight = spotLight->getPointLight();
+	vec3 coneDir = spotLight->getConeDirection();
+	float cutoff = spotLight->getCutOff();
+	setPointLightUniform(".pl", pointLight);
+	setFloatUniform((uniformName + ".conedir").c_str(), &(coneDir[0]), 3, 1);
+	setFloatUniform((uniformName + ".cutoff").c_str(), &cutoff, 1, 1);
+}
+
+void ShaderProgram::setSpotLightUniform(std::string uniformName, SpotLight* spotLight, int pos)
+{
+	setSpotLightUniform(uniformName + "[" + std::to_string(pos) + "]", spotLight);
+}
+
+void ShaderProgram::setDirectionalLightUniform(std::string uniformName, DirectionalLight* dirLight)
+{
+	float intensity = dirLight->getIntensity();
+	setFloatUniform((uniformName + ".colour").c_str(), &(dirLight->getColor()[0]), 3, 1);
+	setFloatUniform((uniformName + ".direction").c_str(), &(dirLight->getDirection()[0]), 3, 1);
+	setFloatUniform((uniformName + ".intensity").c_str(), &intensity, 1, 1);
+}
+
 void ShaderProgram::setMaterialUniform(std::string uniformName, Material* material)
 {
 	float reflectance = material->getReflectance();
@@ -181,6 +243,11 @@ void ShaderProgram::setMaterialUniform(std::string uniformName, Material* materi
 	setFloatUniform((uniformName + ".specular").c_str(), &(material->getSpecularColour()[0]), 4, 1);
 	setIntUniform((uniformName + ".hasTexture").c_str(), &hasTexture, 1, 1);
 	setFloatUniform((uniformName + ".reflectance").c_str(), &reflectance, 1, 1);
+}
+
+void ShaderProgram::setMaterialUniform(std::string uniformName, Material* material, int pos)
+{
+	setMaterialUniform(uniformName + "[" + std::to_string(pos) + "]", material);
 }
 
 int ShaderProgram::getProgram()

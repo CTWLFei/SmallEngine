@@ -12,8 +12,14 @@ public:
 	void clear();
 	void render(Window* window, Camera* camera, vector<GameItem*>& gameItems);
 	void render(Window* window, Camera* camera, vector<GameItem*>& gameItems, vec3 ambientLight, PointLight* pointLight);
+	void render(Window* window, Camera* camera, vector<GameItem*>& gameItems, vec3 ambientLight, vector<PointLight*> pointLights, vector<SpotLight*> spotLights, DirectionalLight* dirLight);
 	void cleanup();
+protected:
+	virtual void renderLights(mat4 viewMatrix, vec3 ambientLight, vector<PointLight*> pointLights, vector<SpotLight*> spotLights, DirectionalLight* dirLight);
 private:
+	static const int MAX_POINT_LIGHTS = 5;
+	static const int MAX_SPOT_LIGHTS = 5;
+
 	static float fov;
 	static float zNear;
 	static float zFar;

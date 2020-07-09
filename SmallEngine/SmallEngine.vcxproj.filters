@@ -123,6 +123,15 @@
     <ClCompile Include="src\se_core\se_graph\se_light\PointLight.cpp">
       <Filter>源文件\se_core\se_graph\se_light</Filter>
     </ClCompile>
+    <ClCompile Include="src\se_core\se_graph\se_light\DirectionalLight.cpp">
+      <Filter>源文件\se_core\se_graph\se_light</Filter>
+    </ClCompile>
+    <ClCompile Include="src\se_core\se_graph\se_light\Light.cpp">
+      <Filter>源文件\se_core\se_graph\se_light</Filter>
+    </ClCompile>
+    <ClCompile Include="src\se_core\se_graph\se_light\SpotLight.cpp">
+      <Filter>源文件\se_core\se_graph\se_light</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\se_game\GameLogic.h">
@@ -182,12 +191,27 @@
     <ClInclude Include="include\se_core\se_graph\se_material\Material.h">
       <Filter>头文件\se_core\se_graph\se_material</Filter>
     </ClInclude>
+    <ClInclude Include="include\se_core\se_graph\se_light\DirectionalLight.h">
+      <Filter>头文件\se_core\se_graph\se_light</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_core\se_graph\se_light\Light.h">
+      <Filter>头文件\se_core\se_graph\se_light</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_core\se_graph\se_light\SpotLight.h">
+      <Filter>头文件\se_core\se_graph\se_light</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\test.fs">
       <Filter>资源文件\shader</Filter>
     </None>
     <None Include="shader\test.vs">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="shader\RTRLight.fs">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="shader\RTRLight.vs">
       <Filter>资源文件\shader</Filter>
     </None>
   </ItemGroup>

@@ -29,12 +29,23 @@ void GameLogicDummy::init(Window* window)
 	gameItems.push_back(gameItem);
 
 	ambientLight = vec3(0.3f, 0.3f, 0.3f);
+	//point light
 	vec3 lightColour = vec3(1, 1, 1);
 	vec3 lightPosition = vec3(0, 0, 1);
 	float lightIntensity = 1.0f;
-	pointLight = new PointLight(lightColour, lightPosition, lightIntensity);
+	pointLight.push_back(new PointLight(lightColour, lightPosition, lightIntensity));
 	Attenuation* att = new Attenuation(0.0f, 0.0f, 1.0f);
-	pointLight->setAttenuation(att);
+	pointLight[0]->setAttenuation(att);
+
+	//spot light
+	lightPosition = vec3(0, 0, 10.0);
+	PointLight* lightSource = new PointLight(lightColour, lightPosition, lightIntensity, att);
+	vec3 coneDir = vec3(0, 0, -1);
+	float cutoff = cos(3.1415926 / 3.0 * 4.0);
+	spotLight.push_back(new SpotLight(lightSource, coneDir, cutoff));
+
+	lightPosition = vec3(-1, 0, 0);
+	directionalLight = new DirectionalLight(vec3(1, 1, 1), lightPosition, lightIntensity);
 }
 
 void GameLogicDummy::input(Window* window, MouseInput* mouseInput)
@@ -75,7 +86,7 @@ void GameLogicDummy::update(float interval, MouseInput* mouseInput)
 void GameLogicDummy::render(Window* window)
 {
 	//renderer->render(window, camera, gameItems);
-	renderer->render(window, camera, gameItems, ambientLight, pointLight);
+	renderer->render(window, camera, gameItems, ambientLight, pointLight, spotLight, directionalLight);
 }
 
 void GameLogicDummy::cleanup()

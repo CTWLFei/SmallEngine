@@ -137,7 +137,10 @@
     <ClCompile Include="src\se_core\se_gl_component\ShaderProgram.cpp" />
     <ClCompile Include="src\se_core\se_gl_component\Texture.cpp" />
     <ClCompile Include="src\se_core\se_graph\Mesh.cpp" />
+    <ClCompile Include="src\se_core\se_graph\se_light\DirectionalLight.cpp" />
+    <ClCompile Include="src\se_core\se_graph\se_light\Light.cpp" />
     <ClCompile Include="src\se_core\se_graph\se_light\PointLight.cpp" />
+    <ClCompile Include="src\se_core\se_graph\se_light\SpotLight.cpp" />
     <ClCompile Include="src\se_core\se_graph\se_loader\OBJLoader.cpp" />
     <ClCompile Include="src\se_core\se_graph\se_material\Material.cpp" />
     <ClCompile Include="src\se_core\Transform.cpp" />
@@ -157,7 +160,10 @@
     <ClInclude Include="include\se_core\se_gl_component\ShaderProgram.h" />
     <ClInclude Include="include\se_core\se_gl_component\Texture.h" />
     <ClInclude Include="include\se_core\se_graph\Mesh.h" />
+    <ClInclude Include="include\se_core\se_graph\se_light\DirectionalLight.h" />
+    <ClInclude Include="include\se_core\se_graph\se_light\Light.h" />
     <ClInclude Include="include\se_core\se_graph\se_light\PointLight.h" />
+    <ClInclude Include="include\se_core\se_graph\se_light\SpotLight.h" />
     <ClInclude Include="include\se_core\se_graph\se_loader\OBJLoader.h" />
     <ClInclude Include="include\se_core\se_graph\se_material\Material.h" />
     <ClInclude Include="include\se_core\Transform.h" />
@@ -167,6 +173,8 @@
     <ClInclude Include="include\se_game\GameLogicDummy.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="shader\RTRLight.fs" />
+    <None Include="shader\RTRLight.vs" />
     <None Include="shader\test.fs" />
     <None Include="shader\test.vs" />
   </ItemGroup>

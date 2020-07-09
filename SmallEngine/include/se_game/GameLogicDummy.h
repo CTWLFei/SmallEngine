@@ -23,8 +23,9 @@ private:
 	Camera* camera;
 	vector<GameItem*> gameItems;
 	vec3 ambientLight;
-	PointLight* pointLight;
-	
+	DirectionalLight* directionalLight;
+	vector<PointLight*> pointLight;
+	vector<SpotLight*> spotLight;
 };
 
 #endif
