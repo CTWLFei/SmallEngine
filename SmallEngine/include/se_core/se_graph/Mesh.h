@@ -3,9 +3,15 @@
 #include "../se_gl_component/Texture.h"
 #include <vector>
 #include <vmath.h>
+#include <functional>
 #include "se_material/Material.h"
+//#include <se_game/GameItem.h>
 using namespace std;
 using namespace vmath;
+
+class GameItem;
+
+typedef function<void(GameItem*)> SetupGameItemCallback;
 class Mesh {
 public:
 	Mesh() { }
@@ -15,9 +21,15 @@ public:
 	int getVaoId() { return this->vaoId; }
 	int getVertexCount() { return this->vertexCount; }
 	void render();
+	void renderList(vector<GameItem*>& gameItems, SetupGameItemCallback callback);
 	void cleanup();
+	void deleteBuffers();
 	void setMaterial(Material* material) { this->material = material; }
 	Material* getMaterial() { return material; }
+private:
+	void initRender();
+	void endRender();
+
 private:
 	static vec3 DEFAULT_COLOUR;
 	GLuint vaoId;

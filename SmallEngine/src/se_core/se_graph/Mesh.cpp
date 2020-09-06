@@ -82,20 +82,25 @@ Mesh::~Mesh()
 }
 void Mesh::render()
 {
-	Texture* texture = material->getTexture();
-	// Activate firs texture bank
-	glActiveTexture(GL_TEXTURE0);
-	// Bind the texture
-	glBindTexture(GL_TEXTURE_2D, texture->id());
-
-	// Draw the mesh
-	glBindVertexArray(getVaoId());
+	initRender();
 
 	glDrawElements(GL_TRIANGLES, getVertexCount(), GL_UNSIGNED_INT, 0);
 
-	// Restore state
-	glBindVertexArray(0);
+	endRender();
 }
+
+void Mesh::renderList(vector<GameItem*>& gameItems, SetupGameItemCallback callback)
+{
+	initRender();
+	for (int i = 0; i < gameItems.size(); i++)
+	{
+		callback(gameItems[i]);
+
+		glDrawElements(GL_TRIANGLES, getVertexCount(), GL_UNSIGNED_INT, 0);
+	}
+	endRender();
+}
+
 void Mesh::cleanup()
 {
 	glDisableVertexAttribArray(0);
@@ -114,4 +119,39 @@ void Mesh::cleanup()
 	// Delete the VAO
 	glBindVertexArray(0);
 	glDeleteVertexArrays(1, &vaoId);
+}
+
+void Mesh::deleteBuffers()
+{
+	glDisableVertexAttribArray(0);
+
+	// Delete the VBOs
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	for (GLuint vboId : vboIdList) {
+		glDeleteBuffers(1, &vboId);
+	}
+
+	// Delete the VAO
+	glBindVertexArray(0);
+	glDeleteVertexArrays(1, &vaoId);
+}
+
+void Mesh::initRender()
+{
+	Texture* texture = material->getTexture();
+	// Activate firs texture bank
+	glActiveTexture(GL_TEXTURE0);
+	// Bind the texture
+	glBindTexture(GL_TEXTURE_2D, texture->id());
+
+	// Draw the mesh
+	glBindVertexArray(getVaoId());
+}
+
+void Mesh::endRender()
+{
+	// Restore state
+	glBindVertexArray(0);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
 }

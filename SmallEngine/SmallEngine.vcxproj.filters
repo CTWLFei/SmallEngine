@@ -70,6 +70,9 @@
     <Filter Include="源文件\se_core\se_graph\se_material">
       <UniqueIdentifier>{420673dd-8d8a-4ba8-ad1b-6c9870977b82}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\se_game\se_game_item">
+      <UniqueIdentifier>{627c1c6e-9502-4f84-b0e8-54611d81bcab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -122,6 +125,9 @@
     </ClCompile>
     <ClCompile Include="src\se_core\se_graph\se_light\PointLight.cpp">
       <Filter>源文件\se_core\se_graph\se_light</Filter>
+    </ClCompile>
+    <ClCompile Include="src\se_game\Scene.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -191,6 +197,15 @@
     <ClInclude Include="include\se_core\se_graph\se_light\SpotLight.h">
       <Filter>头文件\se_core\se_graph\se_light</Filter>
     </ClInclude>
+    <ClInclude Include="include\se_game\SceneLight.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_game\se_game_item\SkyBox.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_game\Scene.h">
+      <Filter>头文件\se_game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\test.fs">
@@ -203,6 +218,12 @@
       <Filter>资源文件\shader</Filter>
     </None>
     <None Include="shader\RTRLight.vs">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="shader\BRDF_test.fs">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="shader\BRDF_test.vs">
       <Filter>资源文件\shader</Filter>
     </None>
   </ItemGroup>

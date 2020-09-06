@@ -14,27 +14,15 @@ Renderer::~Renderer()
 }
 void Renderer::init(Window* window)
 {
-	// Create shader
-	shaderProgram = new ShaderProgram("D:\\VS2015Project\\SmallEngine\\SmallEngine\\shader\\test.vs", "D:\\VS2015Project\\SmallEngine\\SmallEngine\\shader\\test.fs");
-
-	// Create uniforms for modelView and projection matrices and texture
-	shaderProgram->createUniform("projectionMatrix");
-	shaderProgram->createUniform("modelViewMatrix");
-	shaderProgram->createUniform("texture_sampler");
-	// Create uniform for material
-	shaderProgram->createMaterialUniform("material");
-	// Create lighting related uniforms
-	shaderProgram->createUniform("specularPower");
-	shaderProgram->createUniform("ambientLight");
-	shaderProgram->createPointLightUniform("pointLights", MAX_POINT_LIGHTS);
-	shaderProgram->createSpotLightUniform("spotLights", MAX_SPOT_LIGHTS);
-	shaderProgram->createDirectionalLightUniform("directionalLight");
+	setupSceneShader();
+	setupSkyBoxShader();
 }
 void Renderer::clear()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
-void Renderer::render(Window* window, Camera* camera, vector<GameItem*>& gameItems)
+
+void Renderer::render(Window* window, Camera* camera, Scene* scene)
 {
 	clear();
 
@@ -43,120 +31,33 @@ void Renderer::render(Window* window, Camera* camera, vector<GameItem*>& gameIte
 		window->setResized(false);
 	}
 
-	shaderProgram->bind();
+	// Update projection and view atrices once per render cycle
+	transformation->updateProjectionMatrix(fov, window->getWidth(), window->getHeight(), zNear, zFar);
+	transformation->updateViewMatrix(*camera);
 
-	// Update projection Matrix
-	mat4 projectionMatrix = transformation->getProjectionMatrix(fov, window->getWidth(), window->getHeight(), zNear, zFar);
-	shaderProgram->setMat4Uniform("projectionMatrix", projectionMatrix, 1);
+	renderScene(window, camera, scene);
 
-	// Update view Matrix
-	mat4 viewMatrix = transformation->getViewMatrix(*camera);
+	renderSkyBox(window, camera, scene);
 
-	shaderProgram->setTextureUniform(gameItems[0]->getMesh()->getMaterial()->getTexture()->id(), "texture_sampler", GL_TEXTURE_2D);
-	// Render each gameItem
-	for (GameItem* gameItem : gameItems) {
-		// Set model view matrix for this item
-		mat4 modelViewMatrix = transformation->getModelViewMatrix(*gameItem, viewMatrix);
-		vec4 test_vec1 = vec4(0.5, 0.5, 0.5, 1.0);
-		vec4 test_vec2 = vec4(-0.5, -0.5, -0.5, 1.0);
-		vec4 test_result1 = test_vec1 * modelViewMatrix;
-		vec4 test_result2 = test_vec2 * modelViewMatrix;
-		shaderProgram->setMat4Uniform("modelViewMatrix", modelViewMatrix, 1);
-		// Render the mes for this game item
-		gameItem->getMesh()->render();
-	}
-
-	shaderProgram->unbind();
-}
-
-void Renderer::render(Window* window, Camera* camera, vector<GameItem*>& gameItems, vec3 ambientLight, PointLight* pointLight)
-{
-	clear();
-
-	if (window->isResized()) {
-		glViewport(0, 0, window->getWidth(), window->getHeight());
-		window->setResized(false);
-	}
-
-	shaderProgram->bind();
-
-	mat4 projectionMatrix = transformation->getProjectionMatrix(fov, window->getWidth(), window->getHeight(), zNear, zFar);
-	shaderProgram->setMat4Uniform("projectionMatrix", projectionMatrix, 1);
-
-	// Update view Matrix
-	mat4 viewMatrix = transformation->getViewMatrix(*camera);
-
-	// Update Light Uniforms
-	shaderProgram->setFloatUniform("ambientLight", &(ambientLight[0]), 3, 1);
-	shaderProgram->setFloatUniform("specularPower", &specularPower, 1, 1);
-
-	PointLight* curPointLight = new PointLight(*pointLight);
-	vec3 lightPos = curPointLight->getPosition();
-	vec4 aux = vec4(lightPos, 1.0);
-	aux = aux * viewMatrix;
-	lightPos[0] = aux[0];
-	lightPos[1] = aux[1];
-	lightPos[2] = aux[2];
-	shaderProgram->setPointLightUniform("pointLight", curPointLight);
-	shaderProgram->setTextureUniform(0, "texture_sampler", GL_TEXTURE_2D);
-
-	// Render each gameItem
-	for (GameItem* gameItem : gameItems) {
-		Mesh* mesh = gameItem->getMesh();
-		// Set model view matrix for this item
-		mat4 modelViewMatrix = transformation->getModelViewMatrix(*gameItem, viewMatrix);
-		shaderProgram->setMat4Uniform("modelViewMatrix", modelViewMatrix, 1);
-		// Render the mes for this game item
-		shaderProgram->setMaterialUniform("material", mesh->getMaterial());
-		mesh->render();
-	}
-}
-
-void Renderer::render(Window* window, Camera* camera, vector<GameItem*>& gameItems, vec3 ambientLight,
-	vector<PointLight*> pointLights, vector<SpotLight*> spotLights, DirectionalLight* dirLight)
-{
-	clear();
-
-	if (window->isResized()) {
-		glViewport(0, 0, window->getWidth(), window->getHeight());
-		window->setResized(false);
-	}
-
-	shaderProgram->bind();
-
-	mat4 projectionMatrix = transformation->getProjectionMatrix(fov, window->getWidth(), window->getHeight(), zNear, zFar);
-	shaderProgram->setMat4Uniform("projectionMatrix", projectionMatrix, 1);
-
-	// Update view Matrix
-	mat4 viewMatrix = transformation->getViewMatrix(*camera);
-
-	renderLights(viewMatrix, ambientLight, pointLights, spotLights, dirLight);
-
-	shaderProgram->setTextureUniform(0, "texture_sampler", GL_TEXTURE_2D);
-	// Render each gameItem
-	for (GameItem* gameItem : gameItems) {
-		Mesh* mesh = gameItem->getMesh();
-		// Set model view matrix for this item
-		mat4 modelViewMatrix = transformation->getModelViewMatrix(*gameItem, viewMatrix);
-		shaderProgram->setMat4Uniform("modelViewMatrix", modelViewMatrix, 1);
-		// Render the mes for this game item
-		shaderProgram->setMaterialUniform("material", mesh->getMaterial());
-		mesh->render();
-	}
 }
 
 void Renderer::cleanup()
 {
-	if (shaderProgram != NULL) {
-		shaderProgram->cleanup();
+	if (sceneShaderProgram != NULL) {
+		sceneShaderProgram->cleanup();
 	}
 }
 
-void Renderer::renderLights(mat4 viewMatrix, vec3 ambientLight, vector<PointLight*> pointLights, vector<SpotLight*> spotLights, DirectionalLight* dirLight)
+void Renderer::renderLights(const mat4& viewMatrix, SceneLight* sceneLight)
 {
+	vec3 ambientLight = sceneLight->getAmbientLight();
+	vector<PointLight*> pointLights = sceneLight->getPointLightList();
+	vector<SpotLight*> spotLights = sceneLight->getSpotLightList();
+	DirectionalLight* dirLight = sceneLight->getDirectionalLight();
+
 	// Update Light Uniforms
-	shaderProgram->setFloatUniform("ambientLight", &(ambientLight[0]), 3, 1);
-	shaderProgram->setFloatUniform("specularPower", &specularPower, 1, 1);
+	sceneShaderProgram->setFloatUniform("ambientLight", &(ambientLight[0]), 3, 1);
+	sceneShaderProgram->setFloatUniform("specularPower", &specularPower, 1, 1);
 	//point light
 	for (int i = 0; i < pointLights.size(); i++)
 	{
@@ -165,7 +66,7 @@ void Renderer::renderLights(mat4 viewMatrix, vec3 ambientLight, vector<PointLigh
 		vec4 pointLightPosInView = pointLightPos * viewMatrix;
 		vec3 newPointLightPos(pointLightPosInView[0], pointLightPosInView[1], pointLightPosInView[2]);
 		pointLight->setPosition(newPointLightPos);
-		shaderProgram->setPointLightUniform("pointLights", pointLight, i);
+		sceneShaderProgram->setPointLightUniform("pointLights", pointLight, i);
 	}
 
 	//spot light
@@ -176,7 +77,7 @@ void Renderer::renderLights(mat4 viewMatrix, vec3 ambientLight, vector<PointLigh
 		vec4 lightPosInView = lightPos * viewMatrix;
 		vec3 newLightPos(lightPosInView[0], lightPosInView[1], lightPosInView[2]);
 		spotLight->getPointLight()->setPosition(newLightPos);
-		shaderProgram->setSpotLightUniform("spotLights", spotLight, i);
+		sceneShaderProgram->setSpotLightUniform("spotLights", spotLight, i);
 	}
 
 	DirectionalLight* dirLightCopy = new DirectionalLight(*dirLight);
@@ -184,5 +85,78 @@ void Renderer::renderLights(mat4 viewMatrix, vec3 ambientLight, vector<PointLigh
 	vec4 lightDirInView = lightDir * viewMatrix;
 	vec3 newLightDir = vec3(lightDirInView[0], lightDirInView[1], lightDirInView[2]);
 	dirLightCopy->setDirection(newLightDir);
-	shaderProgram->setDirectionalLightUniform("directionalLight", dirLightCopy);
+	sceneShaderProgram->setDirectionalLightUniform("directionalLight", dirLightCopy);
+}
+
+void Renderer::renderScene(Window* window, Camera* camera, Scene* scene)
+{
+	sceneShaderProgram->bind();
+	mat4 projectionMat = transformation->getProjectionMatrix();
+	sceneShaderProgram->setMat4Uniform("projectionMatrix", projectionMat, 1);
+	mat4 viewMat = transformation->getViewMatrix();
+	SceneLight* sceneLight = scene->getSceneLight();
+	renderLights(viewMat, sceneLight);
+	
+	sceneShaderProgram->setTextureUniform(0, "texture_sampler", GL_TEXTURE_2D);
+	map<Mesh*, vector<GameItem*>> meshes = scene->getGameMeshes();
+	for (auto iter = meshes.begin(); iter != meshes.end(); iter++)
+	{
+		sceneShaderProgram->setMaterialUniform("material", iter->first->getMaterial());
+		iter->first->renderList(iter->second, [this](GameItem* gameItem) {
+			mat4 viewMat = transformation->getViewMatrix();
+			mat4 modelViewMatrix = transformation->updateModelViewMatrix(gameItem, viewMat);
+			sceneShaderProgram->setMat4Uniform("modelViewMatrix", modelViewMatrix, 1);
+			});
+	}
+}
+
+void Renderer::renderSkyBox(Window* window, Camera* camera, Scene* scene)
+{
+	skyBoxShaderProgram->bind();
+
+	skyBoxShaderProgram->setTextureUniform(0, "texture_sampler", GL_TEXTURE_2D);
+
+	mat4 projectionMatrix = transformation->getProjectionMatrix();
+	skyBoxShaderProgram->setMat4Uniform("projectionMatrix", projectionMatrix, 1);
+	SkyBox* skyBox = scene->getSkyBox();
+	mat4 viewMatrix = transformation->getViewMatrix();
+	viewMatrix[3][0] = 0;
+	viewMatrix[3][1] = 0;
+	viewMatrix[3][2] = 0;
+	mat4 modelViewMatrix = transformation->updateModelViewMatrix(skyBox, viewMatrix);
+	skyBoxShaderProgram->setMat4Uniform("modelViewMatrix", modelViewMatrix, 1);
+	skyBoxShaderProgram->setFloatUniform("ambientLight", &(scene->getSceneLight()->getAmbientLight()[0]), 3, 1);
+
+	scene->getSkyBox()->getMesh()->render();
+
+	skyBoxShaderProgram->unbind();
+}
+
+void Renderer::setupSceneShader()
+{
+	sceneShaderProgram = new ShaderProgram("D:\\VS2015Project\\SmallEngine\\SmallEngine\\shader\\test.vs", "D:\\VS2015Project\\SmallEngine\\SmallEngine\\shader\\test.fs");
+
+	// Create uniforms for modelView and projection matrices and texture
+	sceneShaderProgram->createUniform("projectionMatrix");
+	sceneShaderProgram->createUniform("modelViewMatrix");
+	sceneShaderProgram->createUniform("texture_sampler");
+	// Create uniform for material
+	sceneShaderProgram->createMaterialUniform("material");
+	// Create lighting related uniforms
+	sceneShaderProgram->createUniform("specularPower");
+	sceneShaderProgram->createUniform("ambientLight");
+	sceneShaderProgram->createPointLightUniform("pointLights", MAX_POINT_LIGHTS);
+	sceneShaderProgram->createSpotLightUniform("spotLights", MAX_SPOT_LIGHTS);
+	sceneShaderProgram->createDirectionalLightUniform("directionalLight");
+}
+
+void Renderer::setupSkyBoxShader()
+{
+	skyBoxShaderProgram = new ShaderProgram("D:\\VS2015Project\\SmallEngine\\SmallEngine\\shader\\skybox.vs", "D:\\VS2015Project\\SmallEngine\\SmallEngine\\shader\\skybox.fs");
+
+	// Create uniforms for projection matrix
+	skyBoxShaderProgram->createUniform("projectionMatrix");
+	skyBoxShaderProgram->createUniform("modelViewMatrix");
+	skyBoxShaderProgram->createUniform("texture_sampler");
+	skyBoxShaderProgram->createUniform("ambientLight");
 }

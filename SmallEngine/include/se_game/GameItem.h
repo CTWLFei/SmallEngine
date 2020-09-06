@@ -6,6 +6,7 @@
 using namespace vmath;
 class GameItem {
 public:
+	GameItem() {};
 	GameItem(Mesh* mesh)
 	{
 		this->mesh = mesh;
@@ -33,6 +34,7 @@ public:
 	}
 
 	Mesh* getMesh() { return mesh; }
+	void setMesh(Mesh* mesh) { this->mesh = mesh; }
 private:
 	Mesh* mesh;
 	vec3 position;

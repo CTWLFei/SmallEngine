@@ -4,6 +4,7 @@
 #include "GameLogic.h"
 #include <se_core/Renderer.h>
 #include <se_core/MouseInput.h>
+#include <se_game/Scene.h>
 
 class GameLogicDummy : public GameLogic {
 public:
@@ -18,6 +19,8 @@ private:
 	static float MOUSE_SENSITIVITY;
 	static float CAMERA_POS_STEP;
 
+	void setupLights();
+
 	vec3 cameraInc;
 	Renderer* renderer;
 	Camera* camera;
@@ -26,6 +29,8 @@ private:
 	DirectionalLight* directionalLight;
 	vector<PointLight*> pointLight;
 	vector<SpotLight*> spotLight;
+	Scene* scene;
+	float lightAngle;
 };
 
 #endif

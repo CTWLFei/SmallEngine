@@ -144,6 +144,7 @@
     <ClCompile Include="src\se_game\GameEngine.cpp" />
     <ClCompile Include="src\se_game\GameItem.cpp" />
     <ClCompile Include="src\se_game\GameLogicDummy.cpp" />
+    <ClCompile Include="src\se_game\Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\se_aux\GLCommon.h" />
@@ -168,8 +169,13 @@
     <ClInclude Include="include\se_game\GameItem.h" />
     <ClInclude Include="include\se_game\GameLogic.h" />
     <ClInclude Include="include\se_game\GameLogicDummy.h" />
+    <ClInclude Include="include\se_game\Scene.h" />
+    <ClInclude Include="include\se_game\SceneLight.h" />
+    <ClInclude Include="include\se_game\se_game_item\SkyBox.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="shader\BRDF_test.fs" />
+    <None Include="shader\BRDF_test.vs" />
     <None Include="shader\RTRLight.fs" />
     <None Include="shader\RTRLight.vs" />
     <None Include="shader\test.fs" />
