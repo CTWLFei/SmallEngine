@@ -5,6 +5,7 @@
 #include <se_core/Renderer.h>
 #include <se_core/MouseInput.h>
 #include <se_game/Scene.h>
+#include <se_game/se_game_item/Terrain.h>
 
 class GameLogicDummy : public GameLogic {
 public:
@@ -30,7 +31,10 @@ private:
 	vector<PointLight*> pointLight;
 	vector<SpotLight*> spotLight;
 	Scene* scene;
+	Terrain* terrain;
 	float lightAngle;
+
+	int pressedKeyCode;
 };
 
 #endif

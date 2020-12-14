@@ -101,7 +101,7 @@ void Mesh::renderList(vector<GameItem*>& gameItems, SetupGameItemCallback callba
 	endRender();
 }
 
-void Mesh::cleanup()
+void Mesh::cleanUp()
 {
 	glDisableVertexAttribArray(0);
 

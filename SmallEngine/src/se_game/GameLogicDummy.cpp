@@ -4,6 +4,7 @@
 #include <se_core/se_graph/se_light/PointLight.h>
 #include <se_game/se_game_item/SkyBox.h>
 
+
 #include <math.h>
 
 float GameLogicDummy::MOUSE_SENSITIVITY = 0.2f;
@@ -28,7 +29,7 @@ void GameLogicDummy::init(Window* window)
 	Texture* texture = new Texture("./textures/grassblock.png");
 	Material* material = new Material(texture, reflectant);
 	mesh->setMaterial(material);
-	float blockScale = 0.5f;
+	float blockScale = 5.0f;
 	float skyBoxScale = 50.0f;
 	float extension = 2.0f;
 
@@ -56,10 +57,22 @@ void GameLogicDummy::init(Window* window)
 		posx = startx;
 		posz -= inc;
 	}
-	scene->setGameItems(gameItems);
+	//scene->setGameItems(gameItems);
 	// Setup  SkyBox
 	SkyBox* skyBox = new SkyBox("./models/skybox.obj", "./textures/skybox.png");
 	skyBox->setScale(skyBoxScale);
+
+	float terrainScale = 10;
+	//int terrainSize = 3;
+	int terrainSize = 3;
+	float minY = -0.1f;
+	float maxY = 0.1f;
+	int textInc = 40;
+	terrain = new Terrain(terrainSize, terrainScale, minY, maxY, "./textures/heightmap.png", "./textures/terrain.png", textInc);
+	scene->setGameItems(terrain->GetGameItems());
+
+	scene->setFog(new Fog(true, vec3(0.5f, 0.5f, 0.5f), 0.15f));
+
 	scene->setSkyBox(skyBox);
 
 	setupLights();
@@ -83,29 +96,61 @@ void GameLogicDummy::init(Window* window)
 	//lightPosition = vec3(-1, 0, 0);
 	//directionalLight = new DirectionalLight(vec3(1, 1, 1), lightPosition, lightIntensity);
 
-	camera->setPosition(0.65, 1.15, 4.34);
+	camera->setPosition(0, 5, 0);
+	camera->setRotation(0, 90, 0);
 }
 
 void GameLogicDummy::input(Window* window, MouseInput* mouseInput)
 {
 	cameraInc = vec3(0, 0, 0);
 	if (window->isKeyPressed(GLFW_KEY_W)) {
+		pressedKeyCode = GLFW_KEY_W;
 		cameraInc[2] = -1;
 	}
 	else if (window->isKeyPressed(GLFW_KEY_S)) {
+		pressedKeyCode = GLFW_KEY_S;
 		cameraInc[2] = 1;
 	}
 	if (window->isKeyPressed(GLFW_KEY_A)) {
+		pressedKeyCode = GLFW_KEY_A;
 		cameraInc[0] = -1;
 	}
 	else if (window->isKeyPressed(GLFW_KEY_D)) {
+		pressedKeyCode = GLFW_KEY_D;
 		cameraInc[0] = 1;
 	}
 	if (window->isKeyPressed(GLFW_KEY_Z)) {
+		pressedKeyCode = GLFW_KEY_Z;
 		cameraInc[1] = -1;
 	}
 	else if (window->isKeyPressed(GLFW_KEY_X)) {
+		pressedKeyCode = GLFW_KEY_X;
 		cameraInc[1] = 1;
+	}
+
+	if (window->isKeyReleased(GLFW_KEY_W) && pressedKeyCode == GLFW_KEY_W) {
+		pressedKeyCode = -1;
+		cameraInc[2] = 0;
+	}
+	else if (window->isKeyReleased(GLFW_KEY_S) && pressedKeyCode == GLFW_KEY_S) {
+		pressedKeyCode = -1;
+		cameraInc[2] = 0;
+	}
+	if (window->isKeyReleased(GLFW_KEY_A) && pressedKeyCode == GLFW_KEY_A) {
+		pressedKeyCode = -1;
+		cameraInc[0] = 0;
+	}
+	else if (window->isKeyReleased(GLFW_KEY_D) && pressedKeyCode == GLFW_KEY_D) {
+		pressedKeyCode = -1;
+		cameraInc[0] = 0;
+	}
+	if (window->isKeyReleased(GLFW_KEY_Z) && pressedKeyCode == GLFW_KEY_Z) {
+		pressedKeyCode = -1;
+		cameraInc[1] = 0;
+	}
+	else if (window->isKeyReleased(GLFW_KEY_X) && pressedKeyCode == GLFW_KEY_X) {
+		pressedKeyCode = -1;
+		cameraInc[1] = 0;
 	}
 }
 
@@ -121,7 +166,8 @@ void GameLogicDummy::update(float interval, MouseInput* mouseInput)
 	}
 
 	// Update camera position
-	camera->movePosition(cameraInc[0] * CAMERA_POS_STEP, cameraInc[1] * CAMERA_POS_STEP, cameraInc[2] * CAMERA_POS_STEP);
+	if(cameraInc[0] != 0 || cameraInc[1] != 0 || cameraInc[2] != 0)
+		camera->movePosition(cameraInc[0] * CAMERA_POS_STEP, cameraInc[1] * CAMERA_POS_STEP, cameraInc[2] * CAMERA_POS_STEP);
 
 	SceneLight* sceneLight = scene->getSceneLight();
 
@@ -159,9 +205,7 @@ void GameLogicDummy::render(Window* window)
 void GameLogicDummy::cleanup()
 {
 	renderer->cleanup();
-	for (GameItem* gameItem : gameItems) {
-		gameItem->getMesh()->cleanup();
-	}
+	scene->cleanup();
 }
 
 void GameLogicDummy::setupLights()

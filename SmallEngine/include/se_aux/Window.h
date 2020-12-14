@@ -26,6 +26,9 @@ public:
 	bool isKeyPressed(int keyCode) {
 		return glfwGetKey(windowHandle, keyCode) == GLFW_PRESS;
 	}
+	bool isKeyReleased(int keyCode) {
+		return glfwGetKey(windowHandle, keyCode) == GLFW_RELEASE;
+	}
 	bool windowShouldClose() { return glfwWindowShouldClose(windowHandle); }
 	string getTitle() { return title; }
 	int getWidth() { return width; }

@@ -8,6 +8,7 @@
 #include "../se_graph/se_light/PointLight.h"
 #include "../se_graph/se_light/DirectionalLight.h"
 #include "../se_graph/se_light/SpotLight.h"
+#include "../se_graph/se_weather/Fog.h"
 #include "../se_graph/se_material/Material.h"
 
 class ShaderProgram
@@ -28,6 +29,8 @@ public:
 
 	void createMaterialUniform(std::string uniformName);
 	void createMaterialUniform(std::string uniformName, int size);
+
+	void createFogUniform(std::string uniformName);
 	
 	void setFloatUniform(const char* name, float* values, int vec_size, int vec_num);
 	void setMat4Uniform(const char* name, float* values, int size);
@@ -43,6 +46,9 @@ public:
 	void setMaterialUniform(std::string uniformName, Material* material, int pos);
 	
 	void setTextureUniform(GLint texture_id, const char* name, GLenum texture_target);
+
+	void setFogUniform(std::string uniformName, Fog* fog);
+
 	int getProgram();
 	virtual ~ShaderProgram();
 

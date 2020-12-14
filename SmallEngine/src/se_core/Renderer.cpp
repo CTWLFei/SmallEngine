@@ -140,6 +140,7 @@ void Renderer::setupSceneShader()
 	sceneShaderProgram->createUniform("projectionMatrix");
 	sceneShaderProgram->createUniform("modelViewMatrix");
 	sceneShaderProgram->createUniform("texture_sampler");
+	sceneShaderProgram->createUniform("normalMap");
 	// Create uniform for material
 	sceneShaderProgram->createMaterialUniform("material");
 	// Create lighting related uniforms
@@ -148,6 +149,7 @@ void Renderer::setupSceneShader()
 	sceneShaderProgram->createPointLightUniform("pointLights", MAX_POINT_LIGHTS);
 	sceneShaderProgram->createSpotLightUniform("spotLights", MAX_SPOT_LIGHTS);
 	sceneShaderProgram->createDirectionalLightUniform("directionalLight");
+	sceneShaderProgram->createFogUniform("fog");
 }
 
 void Renderer::setupSkyBoxShader()

@@ -73,6 +73,15 @@
     <Filter Include="头文件\se_game\se_game_item">
       <UniqueIdentifier>{627c1c6e-9502-4f84-b0e8-54611d81bcab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\se_game\se_game_item">
+      <UniqueIdentifier>{bc538290-0cf3-4415-bb51-b8e9349ba934}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\se_core\se_graph\se_weather">
+      <UniqueIdentifier>{b164872f-a589-47be-b7fd-3627e4fa8234}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\se_core\se_graph\se_weather">
+      <UniqueIdentifier>{ee5fb7aa-ec67-48a3-ad13-2a02e246a143}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -128,6 +137,12 @@
     </ClCompile>
     <ClCompile Include="src\se_game\Scene.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="include\se_core\se_graph\HeightMapMesh.cpp">
+      <Filter>源文件\se_core\se_graph</Filter>
+    </ClCompile>
+    <ClCompile Include="include\se_game\se_game_item\Terrain.cpp">
+      <Filter>源文件\se_game\se_game_item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -200,11 +215,20 @@
     <ClInclude Include="include\se_game\SceneLight.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="include\se_game\se_game_item\SkyBox.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="include\se_game\Scene.h">
       <Filter>头文件\se_game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_game\se_game_item\SkyBox.h">
+      <Filter>头文件\se_game\se_game_item</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_core\se_graph\HeightMapMesh.h">
+      <Filter>头文件\se_core\se_graph</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_game\se_game_item\Terrain.h">
+      <Filter>头文件\se_game\se_game_item</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_core\se_graph\se_weather\Fog.h">
+      <Filter>头文件\se_core\se_graph\se_weather</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

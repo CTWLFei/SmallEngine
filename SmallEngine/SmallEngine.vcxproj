@@ -128,6 +128,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="include\GLAD\glad.c" />
+    <ClCompile Include="include\se_core\se_graph\HeightMapMesh.cpp" />
+    <ClCompile Include="include\se_game\se_game_item\Terrain.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\se_aux\Utils.cpp" />
     <ClCompile Include="src\se_aux\Window.cpp" />
@@ -157,6 +159,7 @@
     <ClInclude Include="include\se_core\se_camera\Camera.h" />
     <ClInclude Include="include\se_core\se_gl_component\ShaderProgram.h" />
     <ClInclude Include="include\se_core\se_gl_component\Texture.h" />
+    <ClInclude Include="include\se_core\se_graph\HeightMapMesh.h" />
     <ClInclude Include="include\se_core\se_graph\Mesh.h" />
     <ClInclude Include="include\se_core\se_graph\se_light\DirectionalLight.h" />
     <ClInclude Include="include\se_core\se_graph\se_light\Light.h" />
@@ -164,6 +167,7 @@
     <ClInclude Include="include\se_core\se_graph\se_light\SpotLight.h" />
     <ClInclude Include="include\se_core\se_graph\se_loader\OBJLoader.h" />
     <ClInclude Include="include\se_core\se_graph\se_material\Material.h" />
+    <ClInclude Include="include\se_core\se_graph\se_weather\Fog.h" />
     <ClInclude Include="include\se_core\Transform.h" />
     <ClInclude Include="include\se_game\GameEngine.h" />
     <ClInclude Include="include\se_game\GameItem.h" />
@@ -172,6 +176,7 @@
     <ClInclude Include="include\se_game\Scene.h" />
     <ClInclude Include="include\se_game\SceneLight.h" />
     <ClInclude Include="include\se_game\se_game_item\SkyBox.h" />
+    <ClInclude Include="include\se_game\se_game_item\Terrain.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\BRDF_test.fs" />

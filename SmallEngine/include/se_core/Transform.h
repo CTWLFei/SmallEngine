@@ -16,6 +16,7 @@ public:
 private:
 	mat4 viewMatrix;
 	mat4 modelViewMatrix;
+	mat4 modelMatrix;
 	mat4 projectionMatrix;
 };
 

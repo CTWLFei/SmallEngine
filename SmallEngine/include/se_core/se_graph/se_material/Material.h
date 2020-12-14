@@ -88,6 +88,17 @@ public:
 	void setTexture(Texture* texture) {
 		this->texture = texture;
 	}
+	bool hasNormalMap() {
+		return this->normalMap;
+	}
+
+	Texture* getNormalMap() {
+		return normalMap;
+	}
+
+	void setNormalMap(Texture* normalMap) {
+		this->normalMap = normalMap;
+	}
 private:
 	static vec4 DEFAULT_COLOUR;
 	vec4 ambientColour;
@@ -95,6 +106,7 @@ private:
 	vec4 specularColour;
 	float reflectance;
 	Texture* texture;
+	Texture* normalMap;
 };
 
 #endif

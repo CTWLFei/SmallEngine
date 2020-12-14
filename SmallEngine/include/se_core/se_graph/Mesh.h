@@ -22,7 +22,7 @@ public:
 	int getVertexCount() { return this->vertexCount; }
 	void render();
 	void renderList(vector<GameItem*>& gameItems, SetupGameItemCallback callback);
-	void cleanup();
+	void cleanUp();
 	void deleteBuffers();
 	void setMaterial(Material* material) { this->material = material; }
 	Material* getMaterial() { return material; }

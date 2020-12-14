@@ -27,24 +27,24 @@ mat4 Transform::updateViewMatrix(Camera& camera)
 {
 	vec3 cameraPos = camera.getPosition();
 	vec3 rotation = camera.getRotation();
-
 	// First do the rotation so camera rotates over its position
 	mat4 rotateX = rotate(rotation[0], 1.0f, 0.0f, 0.0f);
 	mat4 rotateY = rotate(rotation[1], 0.0f, 1.0f, 0.0f);
 	mat4 rotateZ = rotate(rotation[2], 0.0f, 0.0f, 1.0f);
-	viewMatrix = viewMatrix * rotateX * rotateY * rotateZ;
+	viewMatrix = rotateX * rotateY * rotateZ;
 	// Then do the translation
-	viewMatrix = viewMatrix * translate<float>(-cameraPos[0], -cameraPos[1], -cameraPos[2]);
+	viewMatrix = translate<float>(-cameraPos[0], -cameraPos[1], -cameraPos[2]) * viewMatrix;
 	return viewMatrix;
 }
 mat4 Transform::updateModelViewMatrix(GameItem* gameItem, mat4& viewMatrixAux)
 {
 	vec3 rotation = gameItem->getRotation();
-	modelViewMatrix = modelViewMatrix.identity();
-	modelViewMatrix = translate<float>(gameItem->getPosition()[0], gameItem->getPosition()[1], gameItem->getPosition()[2]) * modelViewMatrix;
+	modelMatrix = modelMatrix.identity();
+	modelMatrix = translate<float>(gameItem->getPosition()[0], gameItem->getPosition()[1], gameItem->getPosition()[2]) * modelMatrix;
 	mat4 rotateX = rotate(-rotation[0], 1.0f, 0.0f, 0.0f);
 	mat4 rotateY = rotate(-rotation[1], 0.0f, 1.0f, 0.0f);
 	mat4 rotateZ = rotate(-rotation[2], 0.0f, 0.0f, 1.0f);
-	modelViewMatrix = modelViewMatrix * rotateX * rotateY * rotateZ * scale(gameItem->getScale());
-	return modelViewMatrix * viewMatrixAux;
+	modelMatrix = modelMatrix * rotateX * rotateY * rotateZ * scale(gameItem->getScale());
+	//LOGGER_WARN("modelMatrix's position is: x=" + to_string(viewMatrixAux[3][0]) + ";y=" + to_string(viewMatrixAux[3][1]) + ";z=" + to_string(viewMatrixAux[3][2]));
+	return viewMatrixAux * modelMatrix;
 }

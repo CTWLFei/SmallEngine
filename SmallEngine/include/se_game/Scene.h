@@ -3,17 +3,20 @@
 
 #include "se_game_item/SkyBox.h"
 #include "SceneLight.h"
+#include "../se_core/se_graph/se_weather/Fog.h"
 #include <map>
 #include <vector>
 
 class Scene {
 public:
-	Scene() {};
+	Scene() 
+	{
+		fog = nullptr;
+	}
 	map<Mesh*, vector<GameItem*>> getGameMeshes() {
 		return meshMap;
 	}
-
-	void setGameItems(vector<GameItem*>& gameItems) {
+	void setGameItems(vector<GameItem*> gameItems) {
 		int numGameItems = gameItems.size();
 		for (int i = 0; i < numGameItems; i++) {
 			GameItem* gameItem = gameItems[i];
@@ -38,10 +41,32 @@ public:
 		this->sceneLight = sceneLight;
 	}
 
+	/**
+	 * @return the fog
+	 */
+	Fog* getFog() {
+		return fog;
+	}
+
+	/**
+	 * @param fog the fog to set
+	 */
+	void setFog(Fog* fog) {
+		this->fog = fog;
+	}
+
+	void cleanup() {
+		for (auto iter = meshMap.begin(); iter != meshMap.end(); iter++)
+		{
+			iter->first->cleanUp();
+		}
+	}
+
 private:
 	map<Mesh*, vector<GameItem*>> meshMap;
 	SkyBox* skyBox;
 	SceneLight* sceneLight;
+	Fog* fog;
 };
 
 #endif

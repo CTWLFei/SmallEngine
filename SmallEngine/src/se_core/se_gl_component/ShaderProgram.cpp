@@ -126,6 +126,7 @@ void ShaderProgram::createMaterialUniform(std::string uniformName)
 	createUniform(uniformName + ".diffuse");
 	createUniform(uniformName + ".specular");
 	createUniform(uniformName + ".hasTexture");
+	createUniform(uniformName + ".hasNormalMap");
 	createUniform(uniformName + ".reflectance");
 }
 
@@ -133,6 +134,13 @@ void ShaderProgram::createMaterialUniform(std::string uniformName, int size)
 {
 	for (int pos = 0; pos < size; pos++)
 		createMaterialUniform(uniformName + "[" + std::to_string(pos) + "]");
+}
+
+void ShaderProgram::createFogUniform(std::string uniformName)
+{
+	createUniform(uniformName + ".activeFog");
+	createUniform(uniformName + ".colour");
+	createUniform(uniformName + ".density");
 }
 
 void ShaderProgram::setFloatUniform(const char* name, float* values, int vec_size, int vec_num)
@@ -238,16 +246,27 @@ void ShaderProgram::setMaterialUniform(std::string uniformName, Material* materi
 {
 	float reflectance = material->getReflectance();
 	int hasTexture = material->getTexture() ? 1 : 0;
+	int hasNormalMap = material->hasNormalMap() ? 1 : 0;
 	setFloatUniform((uniformName + ".ambient").c_str(), &(material->getAmbientColour()[0]), 4, 1);
 	setFloatUniform((uniformName + ".diffuse").c_str(), &(material->getDiffuseColour()[0]), 4, 1);
 	setFloatUniform((uniformName + ".specular").c_str(), &(material->getSpecularColour()[0]), 4, 1);
 	setIntUniform((uniformName + ".hasTexture").c_str(), &hasTexture, 1, 1);
+	setIntUniform((uniformName + ".hasNormalMap").c_str(), &hasNormalMap, 1, 1);
 	setFloatUniform((uniformName + ".reflectance").c_str(), &reflectance, 1, 1);
 }
 
 void ShaderProgram::setMaterialUniform(std::string uniformName, Material* material, int pos)
 {
 	setMaterialUniform(uniformName + "[" + std::to_string(pos) + "]", material);
+}
+
+void ShaderProgram::setFogUniform(std::string uniformName, Fog* fog)
+{
+	int active = fog->IsActive() ? 1 : 0;
+	float density = fog->GetDensity();
+	setIntUniform((uniformName + ".activeFog").c_str(), &active, 1, 1);
+	setFloatUniform((uniformName + ".colour").c_str(), &(fog->GetColour()[0]), 3, 1);
+	setFloatUniform((uniformName + ".density").c_str(), &density, 1, 1);
 }
 
 int ShaderProgram::getProgram()

@@ -2,6 +2,7 @@
 
 const int MAX_POINT_LIGHTS = 5;
 const int MAX_SPOT_LIGHTS = 5;
+const float PI = 3.1415926;
 
 in vec2 outTexCoord;
 in vec3 mvVertexNormal;
@@ -49,6 +50,7 @@ struct Material
 };
 
 uniform sampler2D texture_sampler;
+uniform samplerCube texture_skybox;
 uniform vec3 ambientLight;
 uniform float specularPower;
 uniform Material material;
@@ -60,98 +62,50 @@ vec4 ambientC;
 vec4 diffuseC;
 vec4 speculrC;
 
-void setupColours(Material material, vec2 textCoord)
+float chiGGX(float v)
 {
-    if (material.hasTexture == 1)
-    {
-        ambientC = texture(texture_sampler, textCoord);
-        diffuseC = ambientC;
-        speculrC = ambientC;
-    }
-    else
-    {
-        ambientC = material.ambient;
-        diffuseC = material.diffuse;
-        speculrC = material.specular;
-    }
+	return v > 0 ? 1 : 0;
 }
 
-vec4 calcLightColour(vec3 light_colour, float light_intensity, vec3 position, vec3 to_light_dir, vec3 normal)
+vec3 halfAngle(vec3 v1, vec3 v2)
 {
-    vec4 diffuseColour = vec4(0, 0, 0, 0);
-    vec4 specColour = vec4(0, 0, 0, 0);
-
-    // Diffuse Light
-    float diffuseFactor = max(dot(normal, to_light_dir), 0.0);
-    diffuseColour = diffuseC * vec4(light_colour, 1.0) * light_intensity * diffuseFactor;
-
-    // Specular Light
-    vec3 camera_direction = normalize(-position);
-    vec3 from_light_dir = -to_light_dir;
-    vec3 reflected_light = normalize(reflect(from_light_dir , normal));
-    float specularFactor = max( dot(camera_direction, reflected_light), 0.0);
-    specularFactor = pow(specularFactor, specularPower);
-    specColour = speculrC * light_intensity  * specularFactor * material.reflectance * vec4(light_colour, 1.0);
-
-    return (diffuseColour + specColour);
+	return (v1 + v2) / length(v1 + v2);
 }
 
-vec4 calcPointLight(PointLight light, vec3 position, vec3 normal)
+float GGXDistribution(vec3 normal, vec3 half, float alpha)
 {
-    vec3 light_direction = light.position - position;
-    vec3 to_light_dir  = normalize(light_direction);
-    vec4 light_colour = calcLightColour(light.colour, light.intensity, position, to_light_dir, normal);
-
-    // Apply Attenuation
-    float distance = length(light_direction);
-    float attenuationInv = light.att.constant + light.att.linear * distance +
-        light.att.exponent * distance * distance;
-    return light_colour / attenuationInv;
+	float NoH = dot(n,h);
+    float alpha2 = alpha * alpha;
+    float NoH2 = NoH * NoH;
+    float den = NoH2 * alpha2 + (1 - NoH2);
+    return (chiGGX(NoH) * alpha2) / ( PI * den * den );
 }
 
-vec4 calcSpotLight(SpotLight light, vec3 position, vec3 normal)
+float GGX_PartialGeometryTerm(vec3 v, vec3 n, vec3 h, float alpha)
 {
-    vec3 light_direction = light.pl.position - position;
-    vec3 to_light_dir  = normalize(light_direction);
-    vec3 from_light_dir  = -to_light_dir;
-    float spot_alfa = dot(from_light_dir, normalize(light.conedir));
-    
-    vec4 colour = vec4(0, 0, 0, 0);
-    
-    if ( spot_alfa > light.cutoff ) 
-    {
-        colour = calcPointLight(light.pl, position, normal);
-        colour *= (1.0 - (1.0 - spot_alfa)/(1.0 - light.cutoff));
-    }
-    return colour;    
+	float VoH2 = clamp(dot(v,h), 0.0, 1.0);
+	float chi = chiGGX( VoH2 / clamp(dot(v,n)) , 0.0, 1.0 );
+	VoH2 = VoH2 * VoH2;
+	float tan2 = ( 1 - VoH2 ) / VoH2;
+	return (chi * 2) / ( 1 + sqrt( 1 + alpha * alpha * tan2 ) );
 }
 
-vec4 calcDirectionalLight(DirectionalLight light, vec3 position, vec3 normal)
+vec3 Fresnel_Schlick(float cosT, vec3 F0)
 {
-    return calcLightColour(light.colour, light.intensity, position, normalize(light.direction), normal);
+	float factor = pow(1 - cosT, 5);
+	vec3 inverseF0 = vec3((1 - F0.x) * factor, (1 - F0.y) * factor, (1 - F0.z) * factor);
+	
+	return F0 + inverseF0;
+}
+
+vec3 GGX_Specular(samplerCube skybox, vec3 normal, vec3 viewVector, float roughness, vec3 F0, vec3& kS)
+{
+	vec3 reflectionVector = reflect(-viewVector, normal);
 }
 
 void main()
 {
-    setupColours(material, outTexCoord);
-
-    vec4 diffuseSpecularComp = calcDirectionalLight(directionalLight, mvVertexPos, mvVertexNormal);
-
-    for (int i=0; i<MAX_POINT_LIGHTS; i++)
-    {
-        if ( pointLights[i].intensity > 0 )
-        {
-            diffuseSpecularComp += calcPointLight(pointLights[i], mvVertexPos, mvVertexNormal); 
-        }
-    }
-
-    for (int i=0; i<MAX_SPOT_LIGHTS; i++)
-    {
-        if ( spotLights[i].pl.intensity > 0 )
-        {
-            diffuseSpecularComp += calcSpotLight(spotLights[i], mvVertexPos, mvVertexNormal);
-        }
-    }
-    
-    fragColor = ambientC * vec4(ambientLight, 1) + diffuseSpecularComp;
+	vec3 F0 = abs((1.0 - ior) / (1.0 + ior));
+	F0 = F0 * F0;
+	F0 = mix(F0, materialColour.rgb, metallic);
 }
