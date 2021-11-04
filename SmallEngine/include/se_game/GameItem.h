@@ -1,16 +1,16 @@
 #ifndef __GAMEITEM_H__
 #define __GAMEITEM_H__
 #include <vmath.h>
-#include <se_core/se_graph/Mesh.h>
+#include <se_core/se_graph/se_default_mesh/Mesh.h>
 
 using namespace vmath;
 class GameItem {
 public:
-	GameItem() {};
+	GameItem() { scale = vec3(1.0); };
 	GameItem(Mesh* mesh)
 	{
 		this->mesh = mesh;
-		scale = 1;
+		scale = vec3(1.0);
 	}
 	~GameItem(){ }
 
@@ -21,9 +21,11 @@ public:
 		this->position[1] = y;
 		this->position[2] = z;
 	}
-	float getScale() {return scale;}
+	vec3 getScale() {return scale;}
 
-	void setScale(float scale) { this->scale = scale; }
+	void setScale(vec3 scale) { this->scale = scale; }
+
+	void setScale(float scale) { this->scale = vec3(scale); }
 
 	vec3 getRotation() {return rotation;}
 
@@ -35,10 +37,10 @@ public:
 
 	Mesh* getMesh() { return mesh; }
 	void setMesh(Mesh* mesh) { this->mesh = mesh; }
-private:
+protected:
 	Mesh* mesh;
 	vec3 position;
-	float scale;
+	vec3 scale;
 	vec3 rotation;
 };
 

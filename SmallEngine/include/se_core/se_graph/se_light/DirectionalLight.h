@@ -5,16 +5,28 @@
 using namespace vmath;
 class DirectionalLight {
 public:
+	class OrthoCoords {
+	public:
+		float left;
+		float right;
+		float bottom;
+		float top;
+		float near;
+		float far;
+	};
+
 	DirectionalLight(vec3 color, vec3 direction, float intensity) {
 		this->color = color;
 		this->direction = direction;
 		this->intensity = intensity;
+		this->shadowPosMult = 1;
 	}
 
 	DirectionalLight(const DirectionalLight& light) {
 		this->color = light.color;
 		this->direction = light.direction;
 		this->intensity = light.intensity;
+		this->shadowPosMult = light.shadowPosMult;
 	}
 
 	vec3 getColor() {
@@ -40,10 +52,33 @@ public:
 	void setIntensity(float intensity) {
 		this->intensity = intensity;
 	}
+
+	float getShadowPosMult() {
+		return this->shadowPosMult;
+	}
+
+	void setShadowPosMult(float shadowPosMult) {
+		this->shadowPosMult = shadowPosMult;
+	}
+
+	OrthoCoords getOrthoCoords() {
+		return this->orthoCords;
+	}
+	void setOrthoCords(float left, float right, float bottom, float top, float near, float far) {
+		orthoCords.left = left;
+		orthoCords.right = right;
+		orthoCords.bottom = bottom;
+		orthoCords.top = top;
+		orthoCords.near = near;
+		orthoCords.far = far;
+	}
+
 private:
 	vec3 color;
 	vec3 direction;
+	float shadowPosMult;
 	float intensity;
+	OrthoCoords orthoCords;
 };
 
 #endif

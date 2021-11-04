@@ -1,7 +1,7 @@
 #ifndef __SKYBOX_H__
 #define __SKYBOX_H__
 #include "../GameItem.h"
-#include "../../se_core/se_graph/se_loader/OBJLoader.h"
+#include "../../se_core/se_loader/OBJLoader.h"
 
 class SkyBox : public GameItem
 {
