@@ -1,14 +1,15 @@
 #include <se_game/GameLogicDummy.h>
-#include <se_core/se_graph/se_loader/OBJLoader.h>
+#include <se_core/se_loader/OBJLoader.h>
 #include <se_core/se_graph/se_material/Material.h>
 #include <se_core/se_graph/se_light/PointLight.h>
 #include <se_game/se_game_item/SkyBox.h>
-
+#include <se_game/se_game_item/Plane.h>
+#include <se_aux/Utils.h>
 
 #include <math.h>
 
 float GameLogicDummy::MOUSE_SENSITIVITY = 0.2f;
-float GameLogicDummy::CAMERA_POS_STEP = 0.05f;
+float GameLogicDummy::CAMERA_POS_STEP = 0.5f;
 GameLogicDummy::GameLogicDummy()
 {
 	renderer = new Renderer();
@@ -25,15 +26,19 @@ void GameLogicDummy::init(Window* window)
 	renderer->init(window);
 	scene = new Scene();
 	float reflectant = 1.0;
-	Mesh* mesh = OBJLoader::loadMesh("./models/cube.obj");
-	Texture* texture = new Texture("./textures/grassblock.png");
+	Mesh* mesh = OBJLoader::loadMesh(Utils::SysPath.ModelPath + "cube.obj");
+	Texture* texture = new Texture(Utils::SysPath.TexturePath + "grassblock.png");
 	Material* material = new Material(texture, reflectant);
 	mesh->setMaterial(material);
-	float blockScale = 5.0f;
+	float blockScale = 1.0f;
 	float skyBoxScale = 50.0f;
 	float extension = 2.0f;
 
-	float startx = extension * (-skyBoxScale + blockScale);
+	GameItem* gameItem = new GameItem(mesh);
+	gameItem->setScale(blockScale);
+	gameItem->setPosition(0, 2, 0);
+	scene->setGameItem(gameItem);
+	/*float startx = extension * (-skyBoxScale + blockScale);
 	float startz = extension * (skyBoxScale - blockScale);
 	float starty = -1.0f;
 	float inc = blockScale * 2;
@@ -43,6 +48,7 @@ void GameLogicDummy::init(Window* window)
 	float incy = 0.0f;
 	int NUM_ROWS = (int)(extension * skyBoxScale * 2 / inc);
 	int NUM_COLS = (int)(extension * skyBoxScale * 2 / inc);
+
 	vector<GameItem*> gameItems;
 	for (int i = 0; i < NUM_ROWS; i++) {
 		for (int j = 0; j < NUM_COLS; j++) {
@@ -56,11 +62,22 @@ void GameLogicDummy::init(Window* window)
 		}
 		posx = startx;
 		posz -= inc;
-	}
+	}*/
 	//scene->setGameItems(gameItems);
 	// Setup  SkyBox
-	SkyBox* skyBox = new SkyBox("./models/skybox.obj", "./textures/skybox.png");
+	SkyBox* skyBox = new SkyBox(Utils::SysPath.ModelPath + "skybox.obj", Utils::SysPath.TexturePath + "skybox.png");
 	skyBox->setScale(skyBoxScale);
+
+	Plane* plane = new Plane(vec2(50,50));
+	plane->setRotation(0, 0, 0);
+	plane->setPosition(0, 0, 0);
+	Material* planeMat = new Material();
+	Texture* planeDiffuseTex = new Texture(Utils::SysPath.TexturePath + "rock.png");
+	Texture* planeNormalMap = new Texture(Utils::SysPath.TexturePath + "rock_normals.png");
+	planeMat->setTexture(planeDiffuseTex);
+	planeMat->setNormalMap(planeNormalMap);
+	plane->getMesh()->setMaterial(planeMat);
+	scene->setGameItem(plane);
 
 	float terrainScale = 10;
 	//int terrainSize = 3;
@@ -68,10 +85,10 @@ void GameLogicDummy::init(Window* window)
 	float minY = -0.1f;
 	float maxY = 0.1f;
 	int textInc = 40;
-	terrain = new Terrain(terrainSize, terrainScale, minY, maxY, "./textures/heightmap.png", "./textures/terrain.png", textInc);
-	scene->setGameItems(terrain->GetGameItems());
+	terrain = new Terrain(terrainSize, terrainScale, minY, maxY, Utils::SysPath.TexturePath + "heightmap.png", Utils::SysPath.TexturePath + "terrain.png", textInc);
+	//scene->setGameItems(terrain->GetGameItems());
 
-	scene->setFog(new Fog(true, vec3(0.5f, 0.5f, 0.5f), 0.15f));
+	scene->setFog(new Fog(true, vec3(0.2f, 0.2f, 0.2f), 0.15f));
 
 	scene->setSkyBox(skyBox);
 
@@ -96,8 +113,8 @@ void GameLogicDummy::init(Window* window)
 	//lightPosition = vec3(-1, 0, 0);
 	//directionalLight = new DirectionalLight(vec3(1, 1, 1), lightPosition, lightIntensity);
 
-	camera->setPosition(0, 5, 0);
-	camera->setRotation(0, 90, 0);
+	camera->setPosition(-10.0, 0, 0);
+	camera->LookAt(vec3(0.0));
 }
 
 void GameLogicDummy::input(Window* window, MouseInput* mouseInput)
@@ -160,9 +177,9 @@ void GameLogicDummy::update(float interval, MouseInput* mouseInput)
 	/*camera->movePosition(cameraInc[0] * CAMERA_POS_STEP, cameraInc[1] * CAMERA_POS_STEP, cameraInc[2] * CAMERA_POS_STEP);*/
 
 	// Update camera based on mouse            
-	if (mouseInput->isRightButtonPressed()) {
+	if (mouseInput->isLeftButtonPressed()) {
 		vec2 rotVec = mouseInput->getDisplVec();
-		camera->moveRotation(rotVec[0] * MOUSE_SENSITIVITY, rotVec[1] * MOUSE_SENSITIVITY, 0);
+		camera->Rotate(rotVec[0] * MOUSE_SENSITIVITY, rotVec[1] * MOUSE_SENSITIVITY, 0);
 	}
 
 	// Update camera position
@@ -173,7 +190,7 @@ void GameLogicDummy::update(float interval, MouseInput* mouseInput)
 
 	// Update directional light direction, intensity and colour
 	DirectionalLight* directionalLight = sceneLight->getDirectionalLight();
-	lightAngle += 1.1f;
+	lightAngle += 0.1f;
 	if (lightAngle > 90) {
 		directionalLight->setIntensity(0);
 		if (lightAngle >= 360) {
@@ -186,6 +203,8 @@ void GameLogicDummy::update(float interval, MouseInput* mouseInput)
 		sceneLight->setAmbientLight(factor, factor, factor);
 		directionalLight->setIntensity(factor);
 		directionalLight->setColor(vec3(directionalLight->getColor()[0], max(factor, 0.9f), max(factor, 0.5f)));
+		directionalLight->setShadowPosMult(5);
+		directionalLight->setOrthoCords(-10.0f, 10.0f, -10.0f, 10.0f, -1.0f, 20.0f);
 	}
 	else {
 		sceneLight->setAmbientLight(1, 1, 1);

@@ -43,6 +43,7 @@ public:
 	void update() {
 		glfwSwapBuffers(windowHandle);
 		glfwPollEvents();
+		//glFlush();
 	}
 	GLFWwindow* getWindowHandle() { return windowHandle; }
 	void init();

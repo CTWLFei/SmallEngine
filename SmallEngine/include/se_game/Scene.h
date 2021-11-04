@@ -16,6 +16,15 @@ public:
 	map<Mesh*, vector<GameItem*>> getGameMeshes() {
 		return meshMap;
 	}
+
+	void setGameItem(GameItem* gameItem) {
+		if (gameItem)
+		{
+			Mesh* mesh = gameItem->getMesh();
+			meshMap[mesh].push_back(gameItem);
+		}
+	}
+
 	void setGameItems(vector<GameItem*> gameItems) {
 		int numGameItems = gameItems.size();
 		for (int i = 0; i < numGameItems; i++) {

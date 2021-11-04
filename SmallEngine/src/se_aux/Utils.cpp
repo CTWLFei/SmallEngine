@@ -1,6 +1,19 @@
 #include <se_aux/Utils.h>
 #include <fstream>
 
+Utils::SystemPath Utils::SysPath;
+
+Utils::SystemPath Utils::ExtractPath(string rootPath)
+{
+	string specificSolutionPath = rootPath.substr(0, rootPath.find_last_of('\\'));
+	string solutionPath = specificSolutionPath.substr(0, specificSolutionPath.find_last_of('\\'));
+	SysPath.RootPath = solutionPath.substr(0, solutionPath.find_last_of('\\')) + "\\SmallEngine";
+	SysPath.ShaderPath = SysPath.RootPath + "\\shader\\";
+	SysPath.TexturePath = SysPath.RootPath + "\\textures\\";
+	SysPath.ModelPath = SysPath.RootPath + "\\models\\";
+	return SysPath;
+}
+
 string Utils::loadResource(string fileName)
 {
 	string result;

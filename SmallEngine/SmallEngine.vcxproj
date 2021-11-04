@@ -128,25 +128,30 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="include\GLAD\glad.c" />
-    <ClCompile Include="include\se_core\se_graph\HeightMapMesh.cpp" />
-    <ClCompile Include="include\se_game\se_game_item\Terrain.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\se_aux\Utils.cpp" />
     <ClCompile Include="src\se_aux\Window.cpp" />
     <ClCompile Include="src\se_core\MouseInput.cpp" />
     <ClCompile Include="src\se_core\Renderer.cpp" />
     <ClCompile Include="src\se_core\se_camera\Camera.cpp" />
+    <ClCompile Include="src\se_core\se_camera\OrthographicCamera.cpp" />
+    <ClCompile Include="src\se_core\se_camera\PerspectiveCamera.cpp" />
     <ClCompile Include="src\se_core\se_gl_component\ShaderProgram.cpp" />
     <ClCompile Include="src\se_core\se_gl_component\Texture.cpp" />
-    <ClCompile Include="src\se_core\se_graph\Mesh.cpp" />
+    <ClCompile Include="src\se_core\se_graph\se_default_mesh\HeightMapMesh.cpp" />
+    <ClCompile Include="src\se_core\se_graph\se_default_mesh\Mesh.cpp" />
     <ClCompile Include="src\se_core\se_graph\se_light\PointLight.cpp" />
-    <ClCompile Include="src\se_core\se_graph\se_loader\OBJLoader.cpp" />
     <ClCompile Include="src\se_core\se_graph\se_material\Material.cpp" />
-    <ClCompile Include="src\se_core\Transform.cpp" />
+    <ClCompile Include="src\se_core\se_graph\se_shadow\ShadowMap.cpp" />
+    <ClCompile Include="src\se_core\se_loader\OBJLoader.cpp" />
+    <ClCompile Include="src\se_core\Transformer.cpp" />
     <ClCompile Include="src\se_game\GameEngine.cpp" />
     <ClCompile Include="src\se_game\GameItem.cpp" />
     <ClCompile Include="src\se_game\GameLogicDummy.cpp" />
     <ClCompile Include="src\se_game\Scene.cpp" />
+    <ClCompile Include="src\se_game\se_game_item\Box.cpp" />
+    <ClCompile Include="src\se_game\se_game_item\Plane.cpp" />
+    <ClCompile Include="src\se_game\se_game_item\Terrain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\se_aux\GLCommon.h" />
@@ -157,30 +162,40 @@
     <ClInclude Include="include\se_core\MouseInput.h" />
     <ClInclude Include="include\se_core\Renderer.h" />
     <ClInclude Include="include\se_core\se_camera\Camera.h" />
+    <ClInclude Include="include\se_core\se_camera\OrthographicCamera.h" />
+    <ClInclude Include="include\se_core\se_camera\PerspectiveCamera.h" />
     <ClInclude Include="include\se_core\se_gl_component\ShaderProgram.h" />
     <ClInclude Include="include\se_core\se_gl_component\Texture.h" />
-    <ClInclude Include="include\se_core\se_graph\HeightMapMesh.h" />
-    <ClInclude Include="include\se_core\se_graph\Mesh.h" />
+    <ClInclude Include="include\se_core\se_graph\se_default_mesh\HeightMapMesh.h" />
+    <ClInclude Include="include\se_core\se_graph\se_default_mesh\Mesh.h" />
     <ClInclude Include="include\se_core\se_graph\se_light\DirectionalLight.h" />
     <ClInclude Include="include\se_core\se_graph\se_light\Light.h" />
     <ClInclude Include="include\se_core\se_graph\se_light\PointLight.h" />
     <ClInclude Include="include\se_core\se_graph\se_light\SpotLight.h" />
-    <ClInclude Include="include\se_core\se_graph\se_loader\OBJLoader.h" />
     <ClInclude Include="include\se_core\se_graph\se_material\Material.h" />
+    <ClInclude Include="include\se_core\se_graph\se_shadow\ShadowMap.h" />
     <ClInclude Include="include\se_core\se_graph\se_weather\Fog.h" />
-    <ClInclude Include="include\se_core\Transform.h" />
+    <ClInclude Include="include\se_core\se_loader\OBJLoader.h" />
+    <ClInclude Include="include\se_core\Transformer.h" />
     <ClInclude Include="include\se_game\GameEngine.h" />
     <ClInclude Include="include\se_game\GameItem.h" />
     <ClInclude Include="include\se_game\GameLogic.h" />
     <ClInclude Include="include\se_game\GameLogicDummy.h" />
     <ClInclude Include="include\se_game\Scene.h" />
     <ClInclude Include="include\se_game\SceneLight.h" />
+    <ClInclude Include="include\se_game\se_game_item\Box.h" />
+    <ClInclude Include="include\se_game\se_game_item\Plane.h" />
     <ClInclude Include="include\se_game\se_game_item\SkyBox.h" />
     <ClInclude Include="include\se_game\se_game_item\Terrain.h" />
+    <ClInclude Include="include\se_math\Matrix.h" />
+    <ClInclude Include="include\se_math\Vector.h" />
+    <ClInclude Include="include\se_test\TestVector.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\BRDF_test.fs" />
     <None Include="shader\BRDF_test.vs" />
+    <None Include="shader\depth_fragment.fs" />
+    <None Include="shader\depth_vertext.vs" />
     <None Include="shader\RTRLight.fs" />
     <None Include="shader\RTRLight.vs" />
     <None Include="shader\test.fs" />

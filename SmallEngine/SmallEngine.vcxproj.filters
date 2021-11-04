@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="头文件\se_game">
-      <UniqueIdentifier>{48125be6-99c4-4a1f-af3c-8181e1ebb36f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="源文件\se_game">
       <UniqueIdentifier>{a7f27f42-2392-428b-90b3-4e74a640a7f0}</UniqueIdentifier>
     </Filter>
@@ -52,17 +49,11 @@
     <Filter Include="源文件\se_core\se_graph">
       <UniqueIdentifier>{c560b880-578f-4f36-a88d-4694d090de6d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件\se_core\se_graph\se_loader">
-      <UniqueIdentifier>{d17a9beb-ac36-4bb0-8d6e-61a7de97262d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="源文件\se_core\se_graph\se_loader">
       <UniqueIdentifier>{35d8e7f0-cb59-4d5d-bdef-46b243e667e3}</UniqueIdentifier>
     </Filter>
     <Filter Include="头文件\se_core\se_graph\se_light">
       <UniqueIdentifier>{82a5343e-4fa8-4588-bb77-104eb5041e71}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="头文件\se_core\se_graph\se_material">
-      <UniqueIdentifier>{5588c05c-3504-4ca7-a4e9-a2e31946a618}</UniqueIdentifier>
     </Filter>
     <Filter Include="源文件\se_core\se_graph\se_light">
       <UniqueIdentifier>{70b6dbde-8228-421d-a4f6-715c4310f8f0}</UniqueIdentifier>
@@ -70,17 +61,44 @@
     <Filter Include="源文件\se_core\se_graph\se_material">
       <UniqueIdentifier>{420673dd-8d8a-4ba8-ad1b-6c9870977b82}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件\se_game\se_game_item">
-      <UniqueIdentifier>{627c1c6e-9502-4f84-b0e8-54611d81bcab}</UniqueIdentifier>
-    </Filter>
     <Filter Include="源文件\se_game\se_game_item">
       <UniqueIdentifier>{bc538290-0cf3-4415-bb51-b8e9349ba934}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\se_core\se_graph\se_weather">
+      <UniqueIdentifier>{ee5fb7aa-ec67-48a3-ad13-2a02e246a143}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\se_core\se_graph\se_shadow">
+      <UniqueIdentifier>{f1364feb-d023-4ee3-840c-70581a0fe120}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\se_core\se_graph\se_shadow">
+      <UniqueIdentifier>{92838390-8f69-41c2-a2c3-173c94bfd4e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\se_core\se_graph\se_default_mesh">
+      <UniqueIdentifier>{ab6b1277-19be-4bb1-be4c-3de9546e1b11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\se_core\se_graph\se_default_mesh">
+      <UniqueIdentifier>{9799a7b1-f7f2-409f-a5eb-36a4428e648d}</UniqueIdentifier>
     </Filter>
     <Filter Include="头文件\se_core\se_graph\se_weather">
       <UniqueIdentifier>{b164872f-a589-47be-b7fd-3627e4fa8234}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\se_core\se_graph\se_weather">
-      <UniqueIdentifier>{ee5fb7aa-ec67-48a3-ad13-2a02e246a143}</UniqueIdentifier>
+    <Filter Include="头文件\se_game">
+      <UniqueIdentifier>{48125be6-99c4-4a1f-af3c-8181e1ebb36f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\se_game\se_game_item">
+      <UniqueIdentifier>{627c1c6e-9502-4f84-b0e8-54611d81bcab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\se_test">
+      <UniqueIdentifier>{379b97bd-55a6-472a-b61a-4524045740e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\se_math">
+      <UniqueIdentifier>{5c6b962d-0663-4b14-8a05-91e479ffe9af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\se_core\se_graph\se_material">
+      <UniqueIdentifier>{5588c05c-3504-4ca7-a4e9-a2e31946a618}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\se_core\se_loader">
+      <UniqueIdentifier>{d17a9beb-ac36-4bb0-8d6e-61a7de97262d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -99,9 +117,6 @@
     <ClCompile Include="src\se_aux\Window.cpp">
       <Filter>源文件\se_aux</Filter>
     </ClCompile>
-    <ClCompile Include="src\se_core\se_graph\Mesh.cpp">
-      <Filter>源文件\se_core\se_graph</Filter>
-    </ClCompile>
     <ClCompile Include="src\se_core\se_camera\Camera.cpp">
       <Filter>源文件\se_core\se_camera</Filter>
     </ClCompile>
@@ -117,17 +132,11 @@
     <ClCompile Include="src\se_core\se_gl_component\Texture.cpp">
       <Filter>源文件\se_core\se_gl_component</Filter>
     </ClCompile>
-    <ClCompile Include="src\se_core\Transform.cpp">
-      <Filter>源文件\se_core</Filter>
-    </ClCompile>
     <ClCompile Include="src\se_game\GameItem.cpp">
       <Filter>源文件\se_game</Filter>
     </ClCompile>
     <ClCompile Include="src\se_core\MouseInput.cpp">
       <Filter>源文件\se_core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\se_core\se_graph\se_loader\OBJLoader.cpp">
-      <Filter>源文件\se_core\se_graph\se_loader</Filter>
     </ClCompile>
     <ClCompile Include="src\se_core\se_graph\se_material\Material.cpp">
       <Filter>源文件\se_core\se_graph\se_material</Filter>
@@ -138,11 +147,35 @@
     <ClCompile Include="src\se_game\Scene.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="include\se_core\se_graph\HeightMapMesh.cpp">
-      <Filter>源文件\se_core\se_graph</Filter>
+    <ClCompile Include="src\se_core\se_graph\se_default_mesh\HeightMapMesh.cpp">
+      <Filter>源文件\se_core\se_graph\se_default_mesh</Filter>
     </ClCompile>
-    <ClCompile Include="include\se_game\se_game_item\Terrain.cpp">
+    <ClCompile Include="src\se_core\se_graph\se_default_mesh\Mesh.cpp">
+      <Filter>源文件\se_core\se_graph\se_default_mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="src\se_game\se_game_item\Box.cpp">
       <Filter>源文件\se_game\se_game_item</Filter>
+    </ClCompile>
+    <ClCompile Include="src\se_game\se_game_item\Plane.cpp">
+      <Filter>源文件\se_game\se_game_item</Filter>
+    </ClCompile>
+    <ClCompile Include="src\se_game\se_game_item\Terrain.cpp">
+      <Filter>源文件\se_game\se_game_item</Filter>
+    </ClCompile>
+    <ClCompile Include="src\se_core\se_graph\se_shadow\ShadowMap.cpp">
+      <Filter>源文件\se_core\se_graph\se_shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="src\se_core\se_camera\OrthographicCamera.cpp">
+      <Filter>源文件\se_core\se_camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\se_core\se_camera\PerspectiveCamera.cpp">
+      <Filter>源文件\se_core\se_camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\se_core\se_loader\OBJLoader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\se_core\Transformer.cpp">
+      <Filter>源文件\se_core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -170,9 +203,6 @@
     <ClInclude Include="include\se_core\se_camera\Camera.h">
       <Filter>头文件\se_core\se_camera</Filter>
     </ClInclude>
-    <ClInclude Include="include\se_core\se_graph\Mesh.h">
-      <Filter>头文件\se_core\se_graph</Filter>
-    </ClInclude>
     <ClInclude Include="include\se_core\se_gl_component\ShaderProgram.h">
       <Filter>头文件\se_core\se_gl_component</Filter>
     </ClInclude>
@@ -185,17 +215,11 @@
     <ClInclude Include="include\se_aux\Logger.h">
       <Filter>头文件\se_aux</Filter>
     </ClInclude>
-    <ClInclude Include="include\se_core\Transform.h">
-      <Filter>头文件\se_core</Filter>
-    </ClInclude>
     <ClInclude Include="include\se_game\GameItem.h">
       <Filter>头文件\se_game</Filter>
     </ClInclude>
     <ClInclude Include="include\se_core\MouseInput.h">
       <Filter>头文件\se_core</Filter>
-    </ClInclude>
-    <ClInclude Include="include\se_core\se_graph\se_loader\OBJLoader.h">
-      <Filter>头文件\se_core\se_graph\se_loader</Filter>
     </ClInclude>
     <ClInclude Include="include\se_core\se_graph\se_light\PointLight.h">
       <Filter>头文件\se_core\se_graph\se_light</Filter>
@@ -221,14 +245,47 @@
     <ClInclude Include="include\se_game\se_game_item\SkyBox.h">
       <Filter>头文件\se_game\se_game_item</Filter>
     </ClInclude>
-    <ClInclude Include="include\se_core\se_graph\HeightMapMesh.h">
-      <Filter>头文件\se_core\se_graph</Filter>
-    </ClInclude>
     <ClInclude Include="include\se_game\se_game_item\Terrain.h">
       <Filter>头文件\se_game\se_game_item</Filter>
     </ClInclude>
     <ClInclude Include="include\se_core\se_graph\se_weather\Fog.h">
       <Filter>头文件\se_core\se_graph\se_weather</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_core\se_graph\se_default_mesh\Mesh.h">
+      <Filter>头文件\se_core\se_graph\se_default_mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_core\se_graph\se_default_mesh\HeightMapMesh.h">
+      <Filter>头文件\se_core\se_graph\se_default_mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_game\se_game_item\Box.h">
+      <Filter>头文件\se_game\se_game_item</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_game\se_game_item\Plane.h">
+      <Filter>头文件\se_game\se_game_item</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_core\se_graph\se_shadow\ShadowMap.h">
+      <Filter>头文件\se_core\se_graph\se_shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_core\se_camera\OrthographicCamera.h">
+      <Filter>头文件\se_core\se_camera</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_core\se_camera\PerspectiveCamera.h">
+      <Filter>头文件\se_core\se_camera</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_test\TestVector.h">
+      <Filter>头文件\se_test</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_core\se_loader\OBJLoader.h">
+      <Filter>头文件\se_core\se_loader</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_math\Matrix.h">
+      <Filter>头文件\se_math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_math\Vector.h">
+      <Filter>头文件\se_math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\se_core\Transformer.h">
+      <Filter>头文件\se_core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -248,6 +305,12 @@
       <Filter>资源文件\shader</Filter>
     </None>
     <None Include="shader\BRDF_test.vs">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="shader\depth_fragment.fs">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="shader\depth_vertext.vs">
       <Filter>资源文件\shader</Filter>
     </None>
   </ItemGroup>

@@ -1,7 +1,8 @@
 #include <se_core/Renderer.h>
+#include <se_aux/Utils.h>
 
-float Renderer::fov = 90.0;
-float Renderer::zNear = 0.01;
+float Renderer::fov = 50.0;
+float Renderer::zNear = 1.0;
 float Renderer::zFar = 1000.0;
 Renderer::Renderer()
 {
@@ -16,6 +17,7 @@ void Renderer::init(Window* window)
 {
 	setupSceneShader();
 	setupSkyBoxShader();
+	setupDepthShader();
 }
 void Renderer::clear()
 {
@@ -25,6 +27,8 @@ void Renderer::clear()
 void Renderer::render(Window* window, Camera* camera, Scene* scene)
 {
 	clear();
+
+	renderDepthMap(window, camera, scene);
 
 	if (window->isResized()) {
 		glViewport(0, 0, window->getWidth(), window->getHeight());
@@ -90,22 +94,37 @@ void Renderer::renderLights(const mat4& viewMatrix, SceneLight* sceneLight)
 
 void Renderer::renderScene(Window* window, Camera* camera, Scene* scene)
 {
+	glViewport(0, 0, window->getWidth(), window->getHeight());
 	sceneShaderProgram->bind();
 	mat4 projectionMat = transformation->getProjectionMatrix();
 	sceneShaderProgram->setMat4Uniform("projectionMatrix", projectionMat, 1);
+
+	mat4 orthoProjMatrix = transformation->getOrthoProjectionMatrix();
+	sceneShaderProgram->setMat4Uniform("orthoProjectionMatrix", orthoProjMatrix, 1);
+
 	mat4 viewMat = transformation->getViewMatrix();
 	SceneLight* sceneLight = scene->getSceneLight();
+	mat4 lightViewMatrix = transformation->getLightViewMatrix();
 	renderLights(viewMat, sceneLight);
 	
 	sceneShaderProgram->setTextureUniform(0, "texture_sampler", GL_TEXTURE_2D);
+	sceneShaderProgram->setTextureUniform(1, "normalMap", GL_TEXTURE_2D);
+	sceneShaderProgram->setTextureUniform(2, "shadowMap", GL_TEXTURE_2D);
+	sceneShaderProgram->setFogUniform("fog", scene->getFog());
+
 	map<Mesh*, vector<GameItem*>> meshes = scene->getGameMeshes();
 	for (auto iter = meshes.begin(); iter != meshes.end(); iter++)
 	{
 		sceneShaderProgram->setMaterialUniform("material", iter->first->getMaterial());
-		iter->first->renderList(iter->second, [this](GameItem* gameItem) {
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, shadowMap->getDepthMapTexture()->id());
+
+		iter->first->renderList(iter->second, [this, lightViewMatrix](GameItem* gameItem) {
 			mat4 viewMat = transformation->getViewMatrix();
 			mat4 modelViewMatrix = transformation->updateModelViewMatrix(gameItem, viewMat);
 			sceneShaderProgram->setMat4Uniform("modelViewMatrix", modelViewMatrix, 1);
+			mat4 modelLightViewMatrix = transformation->buildModelLightViewMatrix(gameItem, lightViewMatrix);
+			sceneShaderProgram->setMat4Uniform("modelLightViewMatrix", modelLightViewMatrix, 1);
 			});
 	}
 }
@@ -132,9 +151,42 @@ void Renderer::renderSkyBox(Window* window, Camera* camera, Scene* scene)
 	skyBoxShaderProgram->unbind();
 }
 
+void Renderer::renderDepthMap(Window* window, Camera* camera, Scene* scene)
+{
+	if (!shadowMap)
+		shadowMap = new ShadowMap();
+	shadowMap->bind();
+	shadowMap->init();
+
+	depthShaderProgram->bind();
+
+	DirectionalLight* directionalLight = scene->getSceneLight()->getDirectionalLight();
+	vec3 lightDirection = directionalLight->getDirection();
+	//float a = acos(lightDirection[2]);
+	float lightAngleX = (float)radians(acos(lightDirection[0]));
+	float lightAngleY = (float)radians(asin(lightDirection[1]));
+	float lightAngleZ = 0;
+
+	mat4 lightViewMatrix = transformation->updateLightViewMatrix(vec3(lightDirection * directionalLight->getShadowPosMult()), vec3(lightAngleX, lightAngleY, lightAngleZ));
+	DirectionalLight::OrthoCoords orthCoords = directionalLight->getOrthoCoords();
+	mat4 orthoProjMatrix = transformation->updateOrthoProjectionMatrix(orthCoords.left, orthCoords.right, orthCoords.bottom, orthCoords.top, orthCoords.near, orthCoords.far);
+	depthShaderProgram->setMat4Uniform("orthoProjectionMatrix", orthoProjMatrix, 1);
+
+	map<Mesh*, vector<GameItem*>> meshes = scene->getGameMeshes();
+	for (auto iter = meshes.begin(); iter != meshes.end(); iter++)
+	{
+		iter->first->renderList(iter->second, [this, lightViewMatrix](GameItem* gameItem) {
+			mat4 modelLightViewMatrix = transformation->buildModelLightViewMatrix(gameItem, lightViewMatrix);
+			depthShaderProgram->setMat4Uniform("modelLightViewMatrix", modelLightViewMatrix, 1);
+			});
+	}
+
+	shadowMap->unbind();
+}
+
 void Renderer::setupSceneShader()
 {
-	sceneShaderProgram = new ShaderProgram("D:\\VS2015Project\\SmallEngine\\SmallEngine\\shader\\test.vs", "D:\\VS2015Project\\SmallEngine\\SmallEngine\\shader\\test.fs");
+	sceneShaderProgram = new ShaderProgram(Utils::SysPath.ShaderPath + "test.vs", Utils::SysPath.ShaderPath + "test.fs");
 
 	// Create uniforms for modelView and projection matrices and texture
 	sceneShaderProgram->createUniform("projectionMatrix");
@@ -150,15 +202,28 @@ void Renderer::setupSceneShader()
 	sceneShaderProgram->createSpotLightUniform("spotLights", MAX_SPOT_LIGHTS);
 	sceneShaderProgram->createDirectionalLightUniform("directionalLight");
 	sceneShaderProgram->createFogUniform("fog");
+
+	// Create uniforms for shadow mapping
+	sceneShaderProgram->createUniform("shadowMap");
+	sceneShaderProgram->createUniform("orthoProjectionMatrix");
+	sceneShaderProgram->createUniform("modelLightViewMatrix");
 }
 
 void Renderer::setupSkyBoxShader()
 {
-	skyBoxShaderProgram = new ShaderProgram("D:\\VS2015Project\\SmallEngine\\SmallEngine\\shader\\skybox.vs", "D:\\VS2015Project\\SmallEngine\\SmallEngine\\shader\\skybox.fs");
+	skyBoxShaderProgram = new ShaderProgram(Utils::SysPath.ShaderPath + "skybox.vs", Utils::SysPath.ShaderPath + "skybox.fs");
 
 	// Create uniforms for projection matrix
 	skyBoxShaderProgram->createUniform("projectionMatrix");
 	skyBoxShaderProgram->createUniform("modelViewMatrix");
 	skyBoxShaderProgram->createUniform("texture_sampler");
 	skyBoxShaderProgram->createUniform("ambientLight");
+}
+
+void Renderer::setupDepthShader()
+{
+	depthShaderProgram = new ShaderProgram(Utils::SysPath.ShaderPath + "depth_vertext.vs", Utils::SysPath.ShaderPath + "depth_fragment.fs");
+
+	depthShaderProgram->createUniform("orthoProjectionMatrix");
+	depthShaderProgram->createUniform("modelLightViewMatrix");
 }

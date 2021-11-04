@@ -1,7 +1,7 @@
 #ifndef __TERRAIN_H__
 #define __TERRAIN_H__
 #include "../GameItem.h"
-#include "../../se_core/se_graph/HeightMapMesh.h"
+#include "../../se_core/se_graph/se_default_mesh/HeightMapMesh.h"
 
 class Box2D 
 {

@@ -133,13 +133,13 @@ public:
         my_type result;
         int n;
         for (n = 0; n < len; n++)
-            result.data[n] = data[n] * that.data[n];
+            result.data[n] = data[n] / that.data[n];
         return result;
     }
 
     inline vecN& operator/=(const vecN& that)
     {
-        assign(*this * that);
+        assign(*this / that);
 
         return *this;
     }
@@ -633,10 +633,37 @@ static inline mat4 frustum(float left, float right, float bottom, float top, flo
 
 static inline mat4 perspective(float fovy /* in degrees */, float aspect, float n, float f)
 {
-	float rad = 0.5f * fovy * M_PI / 180.0;
-	float  top = n * tan(rad); // bottom = -top
+	float rad = 0.5 * fovy * M_PI / 180.0;
+	float  top = n * tan(rad) ; // bottom = -top
 	float  right = top * aspect; // left = -right
+
 	return frustum(-right, right, -top, top, n, f);
+
+}
+
+static inline mat4 orthogonal(float left, float right, float bottom, float top, float near, float far)
+{
+	mat4 result(mat4::identity());
+
+	float invDisX = 1 / (right - left);
+	float invDisY = 1 / (top - bottom);
+	float invDisZ = 1 / (far - near);
+
+	result[0][0] = 2.0 * invDisX;
+	result[1][1] = 2.0 * invDisY;
+	result[2][2] = 2.0 * invDisZ;
+	result[3][3] = 1.0;
+
+	result[3][0] = -(right + left) * invDisX;
+	result[3][1] = -(top + bottom) * invDisY;
+	result[3][2] = -(far + near) * invDisZ;
+
+	return result;
+}
+
+static inline mat4 orthogonal2D(float left, float right, float bottom, float top)
+{
+	return orthogonal(left, right, bottom, top, -1.0, 1.0);
 }
 
 template <typename T>
@@ -809,7 +836,7 @@ static inline vecN<T,N> operator*(const vecN<T,M>& vec, const matNM<T,N,M>& mat)
     {
         for (n = 0; n < N; n++)
         {
-            result[n] += vec[m] * mat[n][m];
+            result[m] += vec[n] * mat[n][m];
         }
     }
 
